@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lbFeiTactics"
+            android:gravity="center"
+            android:text="FEI TACTICS"
+            android:typeface="monospace"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="87dp"
+            tools:layout_editor_absoluteY="45dp"/>
+
+        <TextView
+            android:id="@+id/lbInicioSesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Inicio de Sesión"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="87dp"
+            tools:layout_editor_absoluteY="97dp"/>
+
+        <EditText
+            android:id="@+id/gamertag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="40dp"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="Usuario"
+            tools:layout_editor_absoluteX="100dp"
+            tools:layout_editor_absoluteY="273dp"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="40dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Contraseña"
+            tools:layout_editor_absoluteX="100dp"
+            tools:layout_editor_absoluteY="384dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lbErrorInicio"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/my_red"
+            android:typeface="monospace"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="87dp"
+            tools:layout_editor_absoluteY="45dp"/>
+
+        <Button
+            android:id="@+id/btnIniciarSesion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Iniciar Sesión"
+            android:layout_margin="16sp"
+            tools:layout_editor_absoluteX="138dp"
+            tools:layout_editor_absoluteY="525dp"/>
+
+        <Button
+            android:id="@+id/btnIniciarInvitado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Jugar como invitado"
+            android:layout_margin="16sp"
+            android:backgroundTint="@color/my_green"
+            tools:layout_editor_absoluteX="138dp"
+            tools:layout_editor_absoluteY="525dp"/>
+
+        <Button
+            android:id="@+id/btnCrearCuenta"
+            style="@style/BotonSinContorno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16sp"
+            android:text="Crear Cuenta"
+            android:textColor="@color/black"
+            tools:layout_editor_absoluteX="131dp"
+            tools:layout_editor_absoluteY="620dp"/>
+    </LinearLayout>
+</layout>
