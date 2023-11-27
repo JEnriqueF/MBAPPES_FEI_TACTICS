@@ -2,86 +2,43 @@ package com.mbappesfeitactics.DAO;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.mbappesfeitactics.POJO.Jugador;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class JugadorDAO {
-    public static Jugador inciarSesion(String gamertag, String password) {
+    public static void iniciarSesion(String gamertag, String contrasenia, final Callback<Jugador> callback) {
+        Retrofit retrofit = APIClient.iniciarAPI();
+        JugadorService jugadorService = retrofit.create(JugadorService.class);
 
-        //Creación del objeto json para mandar
+        Map<String, String> credentials = new HashMap<>();
+        credentials.put("Gamertag", "JuanJuega");
+        credentials.put("contrasenia", "12345");
+        Call<Jugador> call = jugadorService.loginUser(credentials);
 
-        Log.d("Paso1", "Creación Json");
-        JsonObject jsonBody = new JsonObject();
-        jsonBody.addProperty("gamertag", gamertag);
-        jsonBody.addProperty("password", password);
-
-        Log.d("Paso2", "Json Creado Correcto");
-
-        //Conexión con el API
-        Log.d("Paso3", "Comienzo conexion api");
-        ConexionAPI conexionApi = ConexionAPI.getInstance();
-        conexionApi.buildApiUrl("jugador/iniciarsesion");
-        HttpURLConnection conexionAceptada = conexionApi.getConnection();
-
-        Log.d("Paso4", "Conexión completada");
-
-        try {
-            // Configurar la conexión para una solicitud POST
-            Log.d("Paso5", "Inicio POST");
-            conexionAceptada.setRequestMethod("POST");
-            conexionAceptada.setRequestProperty("Content-Type", "application/json");
-            conexionAceptada.setDoOutput(true);
-
-            Log.d("Paso5", "POST completado");
-
-            // Enviar el JSON en el cuerpo de la solicitud
-
-            Log.d("Paso6", "envío POST");
-            try (OutputStream os = conexionAceptada.getOutputStream()) {
-                byte[] input = jsonBody.toString().getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-
-            Log.d("Paso6", "POST enviado");
-
-            // Obtener la respuesta del servidor
-
-            Log.d("Paso7", "Esperando Respuesta");
-
-            int responseCode = conexionAceptada.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-
-
-                // La solicitud fue exitosa, procesar la respuesta
-                try (BufferedReader br = new BufferedReader(new InputStreamReader(conexionAceptada.getInputStream(), "utf-8"))) {
-                    StringBuilder response = new StringBuilder();
-                    String responseLine;
-                    while ((responseLine = br.readLine()) != null) {
-                        response.append(responseLine.trim());
-                    }
-                    // Convertir la respuesta JSON a un objeto Jugador usando Gson
-                    Gson gson = new Gson();
-                    Jugador jugador = gson.fromJson(response.toString(), Jugador.class);
-                    return  jugador;
+        call.enqueue(new Callback<Jugador>() {
+            @Override
+            public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                if (response.isSuccessful()) {
+                    Jugador jugadorIniciado = response.body();
+                    Log.d("A ver", response.toString());
+                    callback.onResponse(call, Response.success(jugadorIniciado));
+                } else {
+                    callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
                 }
-            } else {
-                // La solicitud no fue exitosa, manejar el código de respuesta según sea necesario
-                return null;
             }
-        } catch (IOException e) {
-            // Manejar excepciones de conexión
-            e.printStackTrace();
-        } finally {
-            // Cerrar la conexión
-            conexionApi.closeConnection();
-        }
-        return null;
+
+            @Override
+            public void onFailure(Call<Jugador> call, Throwable t) {
+                Log.d("PRUEBAGG", "Error en la conexión: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
     }
 }

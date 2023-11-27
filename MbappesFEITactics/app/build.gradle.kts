@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.mbappesfeitactics"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.mbappesfeitactics"
@@ -46,6 +46,6 @@ dependencies {
     compileOnly ("org.projectlombok:lombok:1.18.30")
     annotationProcessor ("org.projectlombok:lombok:1.18.30")
 
-    //GSON
-    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }

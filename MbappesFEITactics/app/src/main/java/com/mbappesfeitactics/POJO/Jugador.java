@@ -17,4 +17,20 @@ public class Jugador {
         this.gamertag = gamertag;
         this.password = password;
     }
+
+    public void setGamertag(String gamertag){
+        this.gamertag = gamertag;
+    }
+
+    public String getGamertag(){
+        return gamertag;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public String getPassword(){
+        return password;
+    }
 }
