@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@drawable/sea"
         tools:context=".MainActivity">
 
         <TextView
@@ -19,6 +20,7 @@
             android:id="@+id/lbFeiTactics"
             android:gravity="center"
             android:text="FEI TACTICS"
+            android:layout_margin="40dp"
             android:typeface="monospace"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -95,7 +97,6 @@
 
         <Button
             android:id="@+id/btnCrearCuenta"
-            style="@style/BotonSinContorno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16sp"
@@ -103,5 +104,6 @@
             android:textColor="@color/black"
             tools:layout_editor_absoluteX="131dp"
             tools:layout_editor_absoluteY="620dp"/>
+
     </LinearLayout>
 </layout>
