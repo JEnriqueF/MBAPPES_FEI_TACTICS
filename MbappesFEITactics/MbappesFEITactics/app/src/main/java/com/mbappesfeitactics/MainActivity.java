@@ -58,7 +58,13 @@ public class MainActivity extends AppCompatActivity {
             String password = passwordUsuario.getText().toString();
             Log.d("Test",gamertag);
             if(!gamertag.isEmpty() || !password.isEmpty()) {
+
+                Log.d("PRUEBAGG","Evaluacion");
+
                 loginUser(gamertag, password);
+
+                Log.d("PRUEBAGG","post llamado");
+
                 openMenuPrincipal(gamertag);
                 Toast.makeText(this, "Conexión aceptada", Toast.LENGTH_SHORT).show();
             }else{
