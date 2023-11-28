@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mbappesfeitactics.DAO.APIClient;
 import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.DAO.JugadorService;
 import com.mbappesfeitactics.POJO.Jugador;
@@ -27,13 +26,19 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     private JugadorService jugadorService;
 
+    Jugador jugadorObtenido = new Jugador();
+
+    boolean banderaConexion = false;
+
+    boolean banderaUsuario = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater()); //Para accesar a los datos del layout
         setContentView(binding.getRoot());
         //Componentes de la vista
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         EditText gamertagUsuario = findViewById(R.id.gamertag);
         EditText passwordUsuario = findViewById(R.id.password);
         Button btnInciarSesion = findViewById(R.id.btnIniciarSesion);
@@ -53,20 +58,26 @@ public class MainActivity extends AppCompatActivity {
 
 
         btnInciarSesion.setOnClickListener(v->{
-            //String gamertag = binding.gamertag.getText().toString();
+            jugadorObtenido=null;
+            banderaConexion=true;
+            banderaUsuario=false;
             String gamertag = gamertagUsuario.getText().toString();
             String password = passwordUsuario.getText().toString();
             Log.d("Test",gamertag);
+            Log.d("Test",password);
             if(!gamertag.isEmpty() || !password.isEmpty()) {
 
                 Log.d("PRUEBAGG","Evaluacion");
 
                 loginUser(gamertag, password);
 
-                Log.d("PRUEBAGG","post llamado");
+                if(!banderaConexion){
+                    openMenuPrincipal(gamertag);
+                }else{
+                    Toast.makeText(this, "Error en la conexion", Toast.LENGTH_SHORT).show();
+                }
 
-                openMenuPrincipal(gamertag);
-                Toast.makeText(this, "Conexión aceptada", Toast.LENGTH_SHORT).show();
+
             }else{
                 Toast.makeText(this,"Error al iniciar sesión", Toast.LENGTH_SHORT).show();
             }
@@ -79,20 +90,27 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void loginUser(String gamertag, String password) {
+    private synchronized void loginUser(String gamertag, String password) {
         JugadorDAO.iniciarSesion(gamertag, password, new Callback<Jugador>() {
             @Override
             public void onResponse(Call<Jugador> call, Response<Jugador> response) {
                 // Manejar la respuesta exitosa aquí
                 Jugador jugador = response.body();
-                Log.d("TodoBien", "Jugador Recuperado: "+jugador.getGamertag()+" "+jugador.getPassword()+" "+jugador.getPartidasGanadas()+" "+jugador.getPartidasPerdidas()+" "+jugador.getMazo()+" "+jugador.getIdFoto());
+                if(jugador != null){
+                    jugadorObtenido = jugador;
+                    banderaUsuario = true;
+                    Log.d("TodoBien", "Jugador Recuperado: "+jugadorObtenido.getGamertag()+" "+jugadorObtenido.getPassword()+" "+jugadorObtenido.getPartidasGanadas()+" "+jugadorObtenido.getPartidasPerdidas()+" "+jugadorObtenido.getMazo()+" "+jugadorObtenido.getIdFoto());
+                }else{
+                    jugadorObtenido = null;
+                }
 
             }
+
 
             @Override
             public void onFailure(Call<Jugador> call, Throwable t) {
                 // Manejar el fallo aquí
-                Log.e("Error", "Error en la conexión: " + t.getMessage());
+                banderaConexion = true;
             }
         });
     }

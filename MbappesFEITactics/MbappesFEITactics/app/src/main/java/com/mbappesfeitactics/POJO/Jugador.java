@@ -30,6 +30,10 @@ public class Jugador {
         this.idFoto = idFoto;
     }
 
+    public Jugador(){
+
+    }
+
     public String getGamertag() {
         return gamertag;
     }
