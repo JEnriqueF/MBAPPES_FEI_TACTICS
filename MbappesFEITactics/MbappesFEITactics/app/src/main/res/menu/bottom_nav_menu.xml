@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_menu"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Menú" />
+
+    <item
+        android:id="@+id/navigation_mazo"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="Mazo" />
+
+    <item
+        android:id="@+id/navigation_config"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Config" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/baseline_profile_24"
+        android:title="Profile" />
+
+</menu>

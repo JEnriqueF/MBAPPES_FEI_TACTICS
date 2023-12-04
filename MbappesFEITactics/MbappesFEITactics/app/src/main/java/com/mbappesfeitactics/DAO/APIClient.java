@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
 
     public static Retrofit iniciarAPI(){
-        String baseURL = "https://mk2m8b3x-3000.usw3.devtunnels.ms/";
+        String baseURL = "https://18n4qv9q-3000.usw3.devtunnels.ms/";
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         Retrofit retrofit = new Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create(gson)).build();
         return retrofit;

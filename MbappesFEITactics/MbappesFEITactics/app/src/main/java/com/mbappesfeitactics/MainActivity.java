@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.DAO.JugadorService;
 import com.mbappesfeitactics.POJO.Jugador;
+import com.mbappesfeitactics.Vista.MenuP;
 import com.mbappesfeitactics.Vista.MenuPrincipal;
 import com.mbappesfeitactics.databinding.ActivityMainBinding;
 
@@ -42,8 +43,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openMenuPrincipal(Jugador jugador) {
-        Intent intent = new Intent(this, MenuPrincipal.class);
-        intent.putExtra(MenuPrincipal.GAMERTAG_KEY, jugador.getGamertag());
+        Log.d("Probar OpenMp", "Intent this");
+        Intent intent = new Intent(this, MenuP.class);
+
+        Bundle b = new Bundle();
+        b.putParcelable(MenuP.JUGADOR_KEY, jugador);
+
+        Log.d("Probar OpenMp", "intent.putExtra");
+        Log.d("Probar OpenMp", String.valueOf(jugador));
+        intent.putExtra(MenuP.BUNDLE_KEY, b);
+
+        Log.d("Probar OpenMp", "startActivity");
         startActivity(intent);
     }
 

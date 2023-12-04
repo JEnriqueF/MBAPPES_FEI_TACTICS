@@ -1,5 +1,10 @@
 package com.mbappesfeitactics.POJO;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Getter;
@@ -7,7 +12,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class Jugador {
+public class Jugador implements Parcelable {
     @SerializedName("Gamertag")
     private String gamertag;
     @SerializedName("contrasenia")
@@ -21,17 +26,13 @@ public class Jugador {
     @SerializedName("IdFoto")
     private int idFoto;
 
-    public Jugador(String gamertag, String password, int partidasGanadas, int partidasPerdidas, String mazo, int idFoto){
+    public Jugador(String gamertag, int partidasGanadas, int partidasPerdidas, String mazo, int idFoto,  String password){
         this.gamertag = gamertag;
-        this.password = password;
         this.partidasGanadas = partidasGanadas;
         this.partidasPerdidas = partidasPerdidas;
         this.mazo = mazo;
         this.idFoto = idFoto;
-    }
-
-    public Jugador(){
-
+        this.password = password;
     }
 
     public String getGamertag() {
@@ -49,4 +50,40 @@ public class Jugador {
     public String getMazo() { return mazo; }
 
     public int getIdFoto() { return idFoto; }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(gamertag);
+        dest.writeInt(partidasGanadas);
+        dest.writeInt(partidasPerdidas);
+        dest.writeString(mazo);
+        dest.writeInt(idFoto);
+        dest.writeString(password);
+    }
+
+    protected Jugador(Parcel in){
+        gamertag = in.readString();
+        partidasGanadas = in.readInt();
+        partidasPerdidas = in.readInt();
+        mazo = in.readString();
+        idFoto = in.readInt();
+        password = in.readString();
+    }
+
+    public static final Creator<Jugador> CREATOR = new Creator<Jugador>() {
+        @Override
+        public Jugador createFromParcel(Parcel in) {
+            return new Jugador(in);
+        }
+
+        @Override
+        public Jugador[] newArray(int size) {
+            return new Jugador[size];
+        }
+    };
 }
