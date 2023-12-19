@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/fei_blue"
         tools:context=".Vista.ui.menu.MenuFragment">
 
         <TextView
@@ -18,21 +19,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="150dp"
+            android:text="Inicio"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="120dp"
             android:layout_marginEnd="8dp"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textSize="50sp" />
 
         <Button
             android:id="@+id/btnJugar"
             android:layout_width="230dp"
             android:layout_height="60dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="350dp"
+            android:layout_marginTop="150dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
             android:text="Jugar"
             android:translationX="82dp"
+            android:backgroundTint="@color/btnYellow"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="30dp"
             tools:layout_editor_absoluteX="50dp"
             tools:layout_editor_absoluteY="525dp" />
 
