@@ -23,9 +23,6 @@ public class MazoFragment extends Fragment {
 
         binding = FragmentMazoBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-        final TextView textView = binding.textMazo;
-        mazoViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
