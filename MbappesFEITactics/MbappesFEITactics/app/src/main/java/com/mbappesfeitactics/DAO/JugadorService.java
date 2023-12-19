@@ -15,4 +15,7 @@ public interface JugadorService {
     @POST("jugador/iniciarsesion")
     Call<Jugador> loginUser(@Body Map<String, String> credentials);
 
+    @POST("jugador/registrarjugador")
+    Call<Jugador> createUser(@Body Map<String, Object> credentials);
+
 }

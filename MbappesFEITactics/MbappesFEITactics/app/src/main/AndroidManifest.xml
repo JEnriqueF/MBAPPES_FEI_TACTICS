@@ -15,6 +15,9 @@
         android:theme="@style/Theme.MbappesFEITactics"
         tools:targetApi="31">
         <activity
+            android:name=".Vista.CrearUsuario"
+            android:exported="false" />
+        <activity
             android:name=".Vista.MenuP"
             android:exported="false"
             android:label="@string/title_activity_menu_p" />

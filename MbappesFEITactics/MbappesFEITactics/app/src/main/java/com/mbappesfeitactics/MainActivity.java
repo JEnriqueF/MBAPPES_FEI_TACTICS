@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.DAO.JugadorService;
 import com.mbappesfeitactics.POJO.Jugador;
+import com.mbappesfeitactics.Vista.CrearUsuario;
 import com.mbappesfeitactics.Vista.MenuP;
 import com.mbappesfeitactics.Vista.MenuPrincipal;
 import com.mbappesfeitactics.databinding.ActivityMainBinding;
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
                 showMessage("Ingrese credenciales de acceso");
             }
         });
+
+        binding.btnCrearCuenta.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CrearUsuario.class);
+            startActivity(intent);
+        });
+
     }
 
     private void openMenuPrincipal(Jugador jugador) {
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("Probar OpenMp", "startActivity");
         startActivity(intent);
     }
+
 
     private void loginUser(String gamertag, String password) {
         JugadorDAO.iniciarSesion(gamertag, password, new Callback<Jugador>() {

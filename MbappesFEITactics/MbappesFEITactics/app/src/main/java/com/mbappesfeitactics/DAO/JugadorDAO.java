@@ -28,7 +28,6 @@ public class JugadorDAO {
             public void onResponse(Call<Jugador> call, Response<Jugador> response) {
                 if (response.isSuccessful()) {
                     Jugador jugadorIniciado = response.body();
-                    Log.d("A ver", response.toString());
                     callback.onResponse(call, Response.success(jugadorIniciado));
                 } else {
                     callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
@@ -42,4 +41,35 @@ public class JugadorDAO {
             }
         });
     }
+
+    public static void crearJugador(String gamertag, String password, int idFoto, final Callback<Jugador> callback) {
+        Retrofit retrofit = APIClient.iniciarAPI();
+        JugadorService jugadorService = retrofit.create(JugadorService.class);
+
+        Map<String, Object> credentials = new HashMap<>();
+        credentials.put("gamertag", gamertag);
+        credentials.put("password", password);
+        credentials.put("idFoto", idFoto);
+        Call<Jugador> call = jugadorService.createUser(credentials);
+
+        call.enqueue(new Callback<Jugador>() {
+            @Override
+            public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                if (response.isSuccessful()) {
+                    Jugador jugadorRegistrado = response.body();
+                    callback.onResponse(call, Response.success(jugadorRegistrado));
+                } else {
+                    callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Jugador> call, Throwable t) {
+                Log.d("PRUEBAGG", "Error en la conexión: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+
+    }
+
 }

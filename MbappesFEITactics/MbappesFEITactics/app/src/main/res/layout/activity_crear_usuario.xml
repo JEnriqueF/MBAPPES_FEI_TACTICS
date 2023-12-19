@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Vista.CrearUsuario">
+
+        <TextView
+            android:id="@+id/lbFeiTactics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="FEI TACTICS"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            tools:layout_editor_absoluteX="87dp"
+            tools:layout_editor_absoluteY="45dp" />
+
+        <TextView
+            android:id="@+id/lbCrearusuario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Crear nueva cuenta"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="87dp"
+            tools:layout_editor_absoluteY="97dp"/>
+
+        <TextView
+            android:id="@+id/lbInsertaGamertag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center"
+            android:text="Escribe aquí tu gamertag"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="87dp"
+            tools:layout_editor_absoluteY="97dp"/>
+
+        <EditText
+            android:id="@+id/gamertagCrear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="40dp"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="Ej: JuanJuega"
+            tools:layout_editor_absoluteX="100dp"
+            tools:layout_editor_absoluteY="273dp"/>
+
+        <TextView
+            android:id="@+id/lbInsertaPassowrd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Escribe aquí tu contraseña"
+            android:textSize="30sp"
+            tools:layout_editor_absoluteX="87dp"
+            tools:layout_editor_absoluteY="97dp"/>
+
+        <EditText
+            android:id="@+id/passwordCrear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:layout_margin="40dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Ej: 12345"
+            tools:layout_editor_absoluteX="100dp"
+            tools:layout_editor_absoluteY="384dp"/>
+
+        <Button
+            android:id="@+id/btnCrearCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16sp"
+            android:gravity="center"
+            android:text="Crear Cuenta"
+            tools:layout_editor_absoluteX="138dp"
+            tools:layout_editor_absoluteY="525dp" />
+
+
+</LinearLayout>
