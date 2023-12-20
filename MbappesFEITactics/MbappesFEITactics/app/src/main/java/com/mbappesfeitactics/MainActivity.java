@@ -1,21 +1,31 @@
 package com.mbappesfeitactics;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mbappesfeitactics.DAO.CartaDAO;
 import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.DAO.JugadorService;
+import com.mbappesfeitactics.DAO.RespuestaCartas;
+import com.mbappesfeitactics.POJO.Carta;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.Vista.CrearUsuario;
 import com.mbappesfeitactics.Vista.MenuP;
 import com.mbappesfeitactics.Vista.MenuPrincipal;
 import com.mbappesfeitactics.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +35,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
+    private List<Carta> cartas;
+    private boolean error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +70,13 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("Probar OpenMp", "intent.putExtra");
         Log.d("Probar OpenMp", String.valueOf(jugador));
+
         intent.putExtra(MenuP.BUNDLE_KEY, b);
 
         Log.d("Probar OpenMp", "startActivity");
         startActivity(intent);
     }
+
 
 
     private void loginUser(String gamertag, String password) {
@@ -83,6 +97,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Jugador> call, Throwable t) {
                 showMessage("Error en la conexión");
+            }
+        });
+    }
+
+    private void obtenerCartas() {
+        CartaDAO.recuperarCartas(new Callback<RespuestaCartas>() {
+            @Override
+            public void onResponse(Call<RespuestaCartas> call, Response<RespuestaCartas> response) {
+                if (response.isSuccessful()) {
+                    RespuestaCartas respuestaRecibida = response.body();
+
+                    // Asigna la lista de cartas a tu MutableLiveData
+                    if (respuestaRecibida != null) {
+                        List<Carta> listaCartas = respuestaRecibida.getCartas();
+                        cartas = listaCartas;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaCartas> call, Throwable t) {
+                error = true;
             }
         });
     }

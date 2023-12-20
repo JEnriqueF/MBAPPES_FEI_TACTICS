@@ -35,6 +35,10 @@ public class Jugador implements Parcelable {
         this.password = password;
     }
 
+    public Jugador() {
+
+    }
+
     public String getGamertag() {
         return gamertag;
     }

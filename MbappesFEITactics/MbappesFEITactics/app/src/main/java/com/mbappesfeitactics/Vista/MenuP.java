@@ -7,23 +7,30 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.MutableLiveData;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.mbappesfeitactics.POJO.Carta;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.R;
 import com.mbappesfeitactics.databinding.ActivityMenuPBinding;
 import com.mbappesfeitactics.databinding.ActivityMenuPrincipalBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MenuP extends AppCompatActivity {
 
     private ActivityMenuPBinding binding;
-
+    public MutableLiveData<List<Carta>> cartas = new MutableLiveData<>();
     public static final String JUGADOR_KEY = "jugador_key";
-
     public static final String BUNDLE_KEY = "bundle";
+
+    ArrayList<Carta> listaCartas = new ArrayList<>();
+    Jugador jugadorActual = new Jugador();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

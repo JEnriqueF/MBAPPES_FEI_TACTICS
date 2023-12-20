@@ -1,16 +1,15 @@
 package com.mbappesfeitactics.Vista.ui.mazo;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.mbappesfeitactics.DAO.CartaDAO;
+import com.mbappesfeitactics.DAO.RespuestaCartas;
 import com.mbappesfeitactics.POJO.Carta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,28 +44,25 @@ public class MazoViewModel extends ViewModel {
 
     // Método para obtener una lista de cartas de ejemplo
     private void obtenerCartas() {
-        CartaDAO.recuperarCartas(new Callback<ArrayList<Carta>>() {
+        CartaDAO.recuperarCartas(new Callback<RespuestaCartas>() {
             @Override
-            public void onResponse(Call<ArrayList<Carta>> call, Response<ArrayList<Carta>> response) {
+            public void onResponse(Call<RespuestaCartas> call, Response<RespuestaCartas> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<Carta> listaCartas = response.body();
-                    cartas.setValue(listaCartas);  // Asigna la lista de cartas a tu MutableLiveData
+                    RespuestaCartas respuestaRecibida = response.body();
 
-                    for (Carta carta : listaCartas) {
-                        Log.d("Elemento Carta", "IDCarta: " + carta.getIdCarta() +
-                                ", Costo: " + carta.getCosto() +
-                                ", Poder: " + carta.getPoder() +
-                                ", Imagen: " + carta.getImagen());
+                    // Asigna la lista de cartas a tu MutableLiveData
+                    if (respuestaRecibida != null) {
+                        List<Carta> listaCartas = respuestaRecibida.getCartas();
+                        cartas.postValue(listaCartas);  // O usa setValue si estás en el hilo principal
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Carta>> call, Throwable t) {
+            public void onFailure(Call<RespuestaCartas> call, Throwable t) {
                 error = true;
             }
         });
     }
-
 
 }

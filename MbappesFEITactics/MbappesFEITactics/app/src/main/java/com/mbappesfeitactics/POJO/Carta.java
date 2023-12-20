@@ -1,8 +1,13 @@
 package com.mbappesfeitactics.POJO;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Carta {
+public class Carta implements Parcelable {
 
     @SerializedName("IDCarta")
     private int idCarta;
@@ -11,10 +16,10 @@ public class Carta {
     @SerializedName("Poder")
     private int poder;
     @SerializedName("Imagen")
-    private byte[] imagen; // Representa el campo "Imagen" como un array de bytes
+    private String imagen; // Representa el campo "Imagen" como un array de bytes
 
     // Constructor
-    public Carta(int idCarta, int costo, int poder, byte[] imagen) {
+    public Carta(int idCarta, int costo, int poder, String imagen) {
         this.idCarta = idCarta;
         this.costo = costo;
         this.poder = poder;
@@ -51,12 +56,26 @@ public class Carta {
         this.poder = poder;
     }
 
-    public byte[] getImagen() {
+    public String getImagen() {
         return imagen;
     }
 
-    public void setImagen(byte[] imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(idCarta);
+        dest.writeInt(costo);
+        dest.writeInt(poder);
+        dest.writeString(imagen);
     }
 }
 
