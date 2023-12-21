@@ -27,6 +27,7 @@ public class MazoFragment extends Fragment {
         binding = FragmentMazoBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
         LiveData<List<Carta>> listaCartas = mazoViewModel.getCartas();
         listaCartas.observe(getViewLifecycleOwner(), cartas -> {
             if (cartas != null && cartas.size() > 1) {

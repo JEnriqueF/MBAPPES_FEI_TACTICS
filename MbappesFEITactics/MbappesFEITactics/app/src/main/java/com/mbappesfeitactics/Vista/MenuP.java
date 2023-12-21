@@ -14,7 +14,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.mbappesfeitactics.DAO.CartaDAO;
+import com.mbappesfeitactics.DAO.FotosPerfilDAO;
+import com.mbappesfeitactics.DAO.RespuestaCartas;
+import com.mbappesfeitactics.DAO.RespuestaFotosPerfil;
 import com.mbappesfeitactics.POJO.Carta;
+import com.mbappesfeitactics.POJO.FotosPerfil;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.R;
 import com.mbappesfeitactics.databinding.ActivityMenuPBinding;
@@ -23,17 +28,22 @@ import com.mbappesfeitactics.databinding.ActivityMenuPrincipalBinding;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MenuP extends AppCompatActivity {
 
     private ActivityMenuPBinding binding;
-    public MutableLiveData<List<Carta>> cartas = new MutableLiveData<>();
+    private MutableLiveData<List<Carta>> cartas = new MutableLiveData<>();
+    private MutableLiveData<List<FotosPerfil>> fotosPerfil = new MutableLiveData<>();
     public static final String JUGADOR_KEY = "jugador_key";
     public static final String BUNDLE_KEY = "bundle";
 
-    ArrayList<Carta> listaCartas = new ArrayList<>();
-    Jugador jugadorActual = new Jugador();
+    private boolean error;
 
     private MediaPlayer mediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +87,57 @@ public class MenuP extends AppCompatActivity {
 
         // Reproducir el audio
         mediaPlayer.start();
+
+        recuperarMedia();
+    }
+
+    public void recuperarMedia() {
+        obtenerCartas();
+        obtenerFotosPerfil();
+    }
+
+
+    private void obtenerCartas() {
+        CartaDAO.recuperarCartas(new Callback<RespuestaCartas>() {
+            @Override
+            public void onResponse(Call<RespuestaCartas> call, Response<RespuestaCartas> response) {
+                if (response.isSuccessful()) {
+                    RespuestaCartas respuestaRecibida = response.body();
+
+                    // Asigna la lista de cartas a tu MutableLiveData
+                    if (respuestaRecibida != null) {
+                        List<Carta> listaCartas = respuestaRecibida.getCartas();
+
+                        cartas.postValue(listaCartas);  // O usa setValue si estás en el hilo principal
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaCartas> call, Throwable t) {
+                error = true;
+            }
+        });
+    }
+
+    private void obtenerFotosPerfil() {
+        FotosPerfilDAO.recuperarFotosPerfil(new Callback<RespuestaFotosPerfil>() {
+            @Override
+            public void onResponse(Call<RespuestaFotosPerfil> call, Response<RespuestaFotosPerfil> response) {
+                if (response.isSuccessful()) {
+                    RespuestaFotosPerfil respuestaRecibida = response.body();
+
+                    if (respuestaRecibida != null) {
+                        List<FotosPerfil> listaFotosPerfil = respuestaRecibida.getFotosPerfil();
+
+                        fotosPerfil.postValue(listaFotosPerfil);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaFotosPerfil> call, Throwable t) { error = true; }
+        });
     }
 
     public void reanudarReproduccion() {

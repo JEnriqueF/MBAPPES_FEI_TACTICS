@@ -38,10 +38,6 @@ public class MazoViewModel extends ViewModel {
         return cartas;
     }
 
-    public LiveData<String> getMazo() {
-        return mazo;
-    }
-
     // Método para obtener una lista de cartas de ejemplo
     private void obtenerCartas() {
         CartaDAO.recuperarCartas(new Callback<RespuestaCartas>() {

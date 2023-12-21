@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.mbappesfeitactics.POJO.Carta;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,6 +21,9 @@ public class CartaDAO {
                 if (response.isSuccessful()) {
                     RespuestaCartas respuesta = response.body();
                     Log.d("Cartas Recuperadas", "Cantidad: " + respuesta.getCartas().size());
+                    for (Carta carta: respuesta.getCartas()) {
+                        Log.d("Carta Recibida", carta.toString());
+                    }
                     callback.onResponse(call, Response.success(respuesta));
                 } else {
                     callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
