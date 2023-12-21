@@ -1,5 +1,6 @@
 package com.mbappesfeitactics.Vista;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -32,6 +33,8 @@ public class MenuP extends AppCompatActivity {
     ArrayList<Carta> listaCartas = new ArrayList<>();
     Jugador jugadorActual = new Jugador();
 
+    private MediaPlayer mediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,45 @@ public class MenuP extends AppCompatActivity {
 
         // Configurar el BottomNavigationView con NavController
         NavigationUI.setupWithNavController(navView, navController);
+
+
+        // Inicializar el reproductor de audio
+        mediaPlayer = MediaPlayer.create(this, R.raw.musica_fei_tactics);
+
+        // Configurar un OnCompletionListener para volver a reproducir cuando termine
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                // Reproducir el audio nuevamente cuando termine
+                mediaPlayer.seekTo(0); // Reiniciar al principio
+                mediaPlayer.start();
+            }
+        });
+
+        // Reproducir el audio
+        mediaPlayer.start();
+    }
+
+    public void reanudarReproduccion() {
+        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+        }
+    }
+
+    public void detenerReproduccion() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Liberar recursos del reproductor de audio
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     @Override
