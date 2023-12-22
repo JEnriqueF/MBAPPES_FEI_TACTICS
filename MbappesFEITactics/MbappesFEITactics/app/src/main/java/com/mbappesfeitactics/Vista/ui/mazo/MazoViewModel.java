@@ -49,6 +49,7 @@ public class MazoViewModel extends ViewModel {
                     // Asigna la lista de cartas a tu MutableLiveData
                     if (respuestaRecibida != null) {
                         List<Carta> listaCartas = respuestaRecibida.getCartas();
+                        Log.d("Recuperacion MazoViewModel", "" + listaCartas.get(2));
                         cartas.postValue(listaCartas);  // O usa setValue si estás en el hilo principal
                     }
                 }

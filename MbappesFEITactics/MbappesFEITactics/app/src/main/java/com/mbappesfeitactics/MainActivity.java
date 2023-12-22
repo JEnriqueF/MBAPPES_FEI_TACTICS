@@ -101,28 +101,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void obtenerCartas() {
-        CartaDAO.recuperarCartas(new Callback<RespuestaCartas>() {
-            @Override
-            public void onResponse(Call<RespuestaCartas> call, Response<RespuestaCartas> response) {
-                if (response.isSuccessful()) {
-                    RespuestaCartas respuestaRecibida = response.body();
-
-                    // Asigna la lista de cartas a tu MutableLiveData
-                    if (respuestaRecibida != null) {
-                        List<Carta> listaCartas = respuestaRecibida.getCartas();
-                        cartas = listaCartas;
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RespuestaCartas> call, Throwable t) {
-                error = true;
-            }
-        });
-    }
-
     private void showMessage(String msj){
         Toast.makeText(this,msj, Toast.LENGTH_SHORT).show();
     }

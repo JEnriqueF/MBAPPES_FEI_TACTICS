@@ -9,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,6 +23,7 @@ import com.mbappesfeitactics.POJO.Carta;
 import com.mbappesfeitactics.POJO.FotosPerfil;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.R;
+import com.mbappesfeitactics.Vista.ui.mazo.MazoViewModel;
 import com.mbappesfeitactics.databinding.ActivityMenuPBinding;
 import com.mbappesfeitactics.databinding.ActivityMenuPrincipalBinding;
 
@@ -35,6 +37,7 @@ import retrofit2.Response;
 public class MenuP extends AppCompatActivity {
 
     private ActivityMenuPBinding binding;
+    private MazoViewModel mazoViewModel;
     private MutableLiveData<List<Carta>> cartas = new MutableLiveData<>();
     private MutableLiveData<List<FotosPerfil>> fotosPerfil = new MutableLiveData<>();
     public static final String JUGADOR_KEY = "jugador_key";
@@ -88,6 +91,8 @@ public class MenuP extends AppCompatActivity {
         // Reproducir el audio
         mediaPlayer.start();
 
+        mazoViewModel = new ViewModelProvider(this).get(MazoViewModel.class);
+
         recuperarMedia();
     }
 
@@ -107,8 +112,8 @@ public class MenuP extends AppCompatActivity {
                     // Asigna la lista de cartas a tu MutableLiveData
                     if (respuestaRecibida != null) {
                         List<Carta> listaCartas = respuestaRecibida.getCartas();
-
-                        cartas.postValue(listaCartas);  // O usa setValue si estás en el hilo principal
+                        Log.d("Recuperacion carta MenuP", "" + listaCartas.get(2));
+                        mazoViewModel.getCartas().getValue();
                     }
                 }
             }
