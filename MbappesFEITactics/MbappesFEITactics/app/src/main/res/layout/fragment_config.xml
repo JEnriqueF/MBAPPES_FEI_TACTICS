@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Configuración"
+            android:text="Configuracion"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
@@ -31,63 +31,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_config"
-            android:layout_marginTop="100dp"
             android:layout_marginLeft="180dp"
+            android:layout_marginTop="205dp"
             android:scaleX="2.0"
-            android:scaleY="2.0"/>
+            android:scaleY="2.0" />
 
         <TextView
             android:id="@+id/lbSonido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginEnd="8dp"
-            android:text="Sonido General"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="30dp" />
-
-        <Switch
-            android:id="@+id/miSwitchMusica"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_config"
-            android:layout_marginTop="200dp"
-            android:layout_marginLeft="180dp"
-            android:scaleX="2.0"
-            android:scaleY="2.0"/>
-
-        <TextView
-            android:id="@+id/lbMusica"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="220dp"
             android:layout_marginEnd="8dp"
-            android:text="Música"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="30dp" />
-
-        <Switch
-            android:id="@+id/miSwitchEfectos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_config"
-            android:layout_marginTop="300dp"
-            android:layout_marginLeft="180dp"
-            android:scaleX="2.0"
-            android:scaleY="2.0"/>
-
-        <TextView
-            android:id="@+id/lbEfectos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="320dp"
-            android:layout_marginEnd="8dp"
-            android:text="Efectos"
+            android:text="Sonido General"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="30dp" />

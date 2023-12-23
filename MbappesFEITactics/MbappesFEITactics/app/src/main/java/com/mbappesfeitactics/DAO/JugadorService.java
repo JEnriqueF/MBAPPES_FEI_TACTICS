@@ -10,6 +10,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface JugadorService {
     @POST("jugador/iniciarsesion")
@@ -17,5 +18,8 @@ public interface JugadorService {
 
     @POST("jugador/registrarjugador")
     Call<Jugador> createUser(@Body Map<String, Object> credentials);
+
+    @PUT("/jugador/modificarmazo")
+    Call<Jugador> editarMazo(@Body Map<String, String> datosEditar);
 
 }

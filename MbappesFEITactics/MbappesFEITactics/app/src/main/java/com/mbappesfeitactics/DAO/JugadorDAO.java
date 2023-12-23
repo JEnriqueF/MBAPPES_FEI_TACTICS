@@ -72,4 +72,31 @@ public class JugadorDAO {
 
     }
 
+    public static void editarMazo(String gamertag, String MazoEditado, final Callback<Jugador> callback){
+        Retrofit retrofit = APIClient.iniciarAPI();
+        JugadorService jugadorService = retrofit.create(JugadorService.class);
+
+        Map<String, String> datosEditar = new HashMap<>();
+        datosEditar.put("Gamertag", gamertag);
+        datosEditar.put("Mazo", MazoEditado);
+        Call<Jugador> call = jugadorService.editarMazo(datosEditar);
+
+        call.enqueue(new Callback<Jugador>() {
+            @Override
+            public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                if(response.isSuccessful()){
+                    Jugador jugadorMazoEditado = response.body();
+                    callback.onResponse(call, Response.success(jugadorMazoEditado));
+                }else{
+                    callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
+                }
+            }
+            @Override
+            public void onFailure(Call<Jugador> call, Throwable t) {
+                Log.d("PRUEBAGG", "Error en la conexión: " + t.getMessage());
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
 }
