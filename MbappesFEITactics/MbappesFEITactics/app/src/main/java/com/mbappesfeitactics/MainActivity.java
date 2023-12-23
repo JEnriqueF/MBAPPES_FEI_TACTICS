@@ -21,6 +21,7 @@ import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.Vista.CrearUsuario;
 import com.mbappesfeitactics.Vista.MenuP;
 import com.mbappesfeitactics.Vista.MenuPrincipal;
+import com.mbappesfeitactics.Vista.RecursosCompartidosViewModel;
 import com.mbappesfeitactics.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Jugador> call, Response<Jugador> response) {
                 // Manejar la respuesta exitosa aquí
                 Jugador jugador = response.body();
+
+                RecursosCompartidosViewModel.obtenerInstancia().setJugador(jugador);
+
                 Log.d("MainActivity","Jugador: "+jugador);
                 if(jugador != null){
                     openMenuPrincipal(jugador);

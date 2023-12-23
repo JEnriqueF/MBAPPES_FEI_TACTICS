@@ -113,7 +113,7 @@ public class MenuP extends AppCompatActivity {
                     if (respuestaRecibida != null) {
                         List<Carta> listaCartas = respuestaRecibida.getCartas();
                         Log.d("Recuperacion carta MenuP", "" + listaCartas.get(2));
-                        mazoViewModel.getCartas().getValue();
+                        RecursosCompartidosViewModel.obtenerInstancia().setCartas(listaCartas);
                     }
                 }
             }
@@ -135,7 +135,7 @@ public class MenuP extends AppCompatActivity {
                     if (respuestaRecibida != null) {
                         List<FotosPerfil> listaFotosPerfil = respuestaRecibida.getFotosPerfil();
 
-                        fotosPerfil.postValue(listaFotosPerfil);
+                        RecursosCompartidosViewModel.obtenerInstancia().setFotosPerfil(listaFotosPerfil);
                     }
                 }
             }
