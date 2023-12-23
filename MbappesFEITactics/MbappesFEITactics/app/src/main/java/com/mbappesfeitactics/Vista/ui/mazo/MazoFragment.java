@@ -88,10 +88,42 @@ public class MazoFragment extends Fragment {
                             }
                         }
 
+                        boolean clicadaPrimeroEsMazo = false;
+                        boolean clicadaActualEsMazo = false;
+
                         //Aqui debe controlar las idCarta en el mazoEditado
 
-                        imagenClicada.setImageBitmap(bitmapClicadaActual);
-                        ivMazo.get(0).setImageBitmap(bitmapClicadaPrimero);
+                        //Evaluar si pertenecen a la misma sección para no mover de disponible a disponible o mazo a mazo
+                        for (int i = 0; i < mazoEditado.length; i++) {
+                            if (idCartaClicadaPrimero == mazoEditado[i]) {
+                                clicadaPrimeroEsMazo = true;
+                            }
+                            if (idCartaClicadaActual == mazoEditado[i]) {
+                                clicadaActualEsMazo = true;
+                            }
+                        }
+
+                        //Evaluar
+                        if ((clicadaPrimeroEsMazo && clicadaPrimeroEsMazo) || (!clicadaActualEsMazo && !clicadaActualEsMazo)) {
+
+                        } else {
+                            if (clicadaPrimeroEsMazo) {
+                                for (int i = 0; i < mazoEditado.length; i++) {
+                                    if (idCartaClicadaPrimero == mazoEditado[i]) {
+                                        mazoEditado[i] = idCartaClicadaActual;
+                                    }
+                                }
+
+                            } else if (clicadaActualEsMazo) {
+                                for (int i = 0; i < mazoEditado.length; i++) {
+                                    if (idCartaClicadaActual == mazoEditado[i]) {
+                                        mazoEditado[i] = idCartaClicadaPrimero;
+                                    }
+                                }
+                            }
+                            ivMazo.get(0).setImageBitmap(bitmapClicadaPrimero);
+                            imagenClicada.setImageBitmap(bitmapClicadaActual);
+                        }
                     }
                 }
             }
