@@ -99,4 +99,31 @@ public class JugadorDAO {
         });
     }
 
+    public static void editarFotoPerfil(String gamertag, Integer idFotoPerfil, final Callback<Jugador> callback){
+        Retrofit retrofit = APIClient.iniciarAPI();
+        JugadorService jugadorService = retrofit.create(JugadorService.class);
+
+        Map<String, Object> datosEnviar = new HashMap<>();
+        datosEnviar.put("Gamertag", gamertag);
+        datosEnviar.put("idFoto", Integer.valueOf(idFotoPerfil));
+        Call<Jugador> call = jugadorService.editarFotoPerfil(datosEnviar);
+
+        call.enqueue(new Callback<Jugador>() {
+            @Override
+            public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                if(response.isSuccessful()){
+                    Jugador jugadorFotoEditado = response.body();
+                    callback.onResponse(call, Response.success(jugadorFotoEditado));
+                }else{
+                    callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Jugador> call, Throwable t) {
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
 }

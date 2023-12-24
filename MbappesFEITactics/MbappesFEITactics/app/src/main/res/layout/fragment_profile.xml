@@ -32,9 +32,9 @@
                 android:textSize="50sp" />
 
             <androidx.cardview.widget.CardView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="45dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="60dp">
 
@@ -51,7 +51,7 @@
                 android:id="@+id/lbImagenesDisponibles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="45dp"
                 android:gravity="center"
                 android:text="Imágenes de Perfil Disponibles"
                 android:textSize="16sp"
@@ -107,10 +107,10 @@
                 android:id="@+id/lbPartidasGanadas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="45dp"
                 android:gravity="center"
                 android:text="Partidas Ganadas:"
-                android:textSize="15sp"
+                android:textSize="35sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 tools:layout_editor_absoluteX="87dp"
@@ -120,60 +120,14 @@
                 android:id="@+id/lbNoPartidasGanadas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="25dp"
                 android:gravity="center"
                 android:text="0"
-                android:textSize="15sp"
+                android:textSize="35sp"
                 android:textColor="@color/black"
                 tools:layout_editor_absoluteX="87dp"
                 tools:layout_editor_absoluteY="97dp"/>
 
-            <TextView
-                android:id="@+id/lbEditarGamertag"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:text="Gamertag"
-                android:textSize="25sp"
-                android:textColor="@color/black"
-                tools:layout_editor_absoluteX="87dp"
-                tools:layout_editor_absoluteY="97dp"/>
-
-            <EditText
-                android:id="@+id/gamertagEditar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:layout_margin="10dp"
-                android:ems="10"
-                android:inputType="textEmailAddress"
-                android:hint="Ej: JuanJuega"
-                tools:layout_editor_absoluteX="100dp"
-                tools:layout_editor_absoluteY="273dp"/>
-
-            <TextView
-                android:id="@+id/lbEditaPassowrd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Contraseña"
-                android:textSize="25sp"
-                android:textColor="@color/black"
-                tools:layout_editor_absoluteX="87dp"
-                tools:layout_editor_absoluteY="97dp"/>
-
-            <EditText
-                android:id="@+id/passwordEditar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:layout_margin="10dp"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:hint="Ej: 12345"
-                tools:layout_editor_absoluteX="100dp"
-                tools:layout_editor_absoluteY="384dp"/>
 
             <Button
                 android:id="@+id/btnEditarPerfil"

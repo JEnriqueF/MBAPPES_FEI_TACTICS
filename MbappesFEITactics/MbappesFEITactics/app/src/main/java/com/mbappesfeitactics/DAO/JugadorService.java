@@ -22,4 +22,6 @@ public interface JugadorService {
     @PUT("/jugador/modificarmazo")
     Call<Jugador> editarMazo(@Body Map<String, String> datosEditar);
 
+    @PUT("/jugador/modificarimagenperfil")
+    Call<Jugador> editarFotoPerfil(@Body Map<String, Object> datosEditar);
 }
