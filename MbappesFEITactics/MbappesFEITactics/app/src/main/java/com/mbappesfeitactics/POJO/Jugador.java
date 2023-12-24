@@ -23,7 +23,7 @@ public class Jugador implements Parcelable {
     private int partidasPerdidas;
     @SerializedName("Mazo")
     private String mazo;
-    @SerializedName("IdFoto")
+    @SerializedName("IDFoto")
     private int idFoto;
 
     public Jugador(String gamertag, int partidasGanadas, int partidasPerdidas, String mazo, int idFoto,  String password){
