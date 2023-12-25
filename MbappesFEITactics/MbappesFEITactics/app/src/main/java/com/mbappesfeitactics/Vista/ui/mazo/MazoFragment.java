@@ -70,10 +70,6 @@ public class MazoFragment extends Fragment {
             Log.d("Carta Disponible", String.valueOf(idCarta));
         }
 
-        // Estado anterior de las cartas en el mazo y disponibles
-        List<Integer> estadoAnteriorMazo = obtenerEstadoCartas(ivMazo);
-        List<Integer> estadoAnteriorDisponible = obtenerEstadoCartas(ivDisponible);
-
         ivMazo.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,21 +289,6 @@ public class MazoFragment extends Fragment {
         }
 
         return mazo;
-    }
-
-    private List<Integer> obtenerEstadoCartas(List<ImageView> listaCartas) {
-        List<Integer> estadoCartas = new ArrayList<>();
-
-        for (ImageView carta : listaCartas) {
-            // Obtener el contenido actual de cada ImageView (puedes adaptar esto según tu implementación)
-            Drawable drawable = carta.getDrawable();
-            if (drawable instanceof BitmapDrawable) {
-                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                estadoCartas.add(bitmap.hashCode()); // Usa hashCode para comparar imágenes
-            }
-        }
-
-        return estadoCartas;
     }
 
     private Bitmap convertirDrawableABitmap(Drawable drawable) {

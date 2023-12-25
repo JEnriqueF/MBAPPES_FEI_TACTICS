@@ -57,6 +57,8 @@ public class Jugador implements Parcelable {
 
     public int getIdFoto() { return idFoto; }
 
+    public void setIdFoto(int idFoto){ this.idFoto = idFoto; }
+
     @Override
     public int describeContents() {
         return 0;
