@@ -14,24 +14,30 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.mbappesfeitactics.ConvertidorImagen;
+import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.POJO.Carta;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.Vista.RecursosCompartidosViewModel;
 import com.mbappesfeitactics.databinding.FragmentMazoBinding;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MazoFragment extends Fragment {
 
     private MazoViewModel mazoViewModel;
     private FragmentMazoBinding binding;
-    private ArrayList<ImageView> ivMazo = new ArrayList<>();
-    private ArrayList<ImageView> ivDisponible = new ArrayList<>();
 
+    private ArrayList<ImageView> ivMazo = new ArrayList<>();
+    private int[] mazoEditado = new int[4];
+    private ArrayList<ImageView> ivDisponible = new ArrayList<>();
+    private int[] idCartasDisponible = new int[2];
     private List<Carta> listaCartas;
     private Jugador jugador;
-
-    private int[] mazoEditado;
 
     private ImageView imagenClicada;
 
@@ -55,6 +61,14 @@ public class MazoFragment extends Fragment {
         ivDisponible.add(binding.cartaParaUsar2);
 
         mostrarCartas();
+
+        for (int idCarta: mazoEditado) {
+            Log.d("Carta Mazo", String.valueOf(idCarta));
+        }
+
+        for (int idCarta: idCartasDisponible) {
+            Log.d("Carta Disponible", String.valueOf(idCarta));
+        }
 
         // Estado anterior de las cartas en el mazo y disponibles
         List<Integer> estadoAnteriorMazo = obtenerEstadoCartas(ivMazo);
@@ -101,12 +115,45 @@ public class MazoFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                List<Integer> estadoActualMazo = obtenerEstadoCartas(ivMazo);
-                List<Integer> estadoActualDisponible = obtenerEstadoCartas(ivDisponible);
-                if (!estadoAnteriorMazo.equals(estadoActualMazo) || !estadoAnteriorDisponible.equals(estadoActualDisponible)) {
-                    //Hubo Cambios
-                } else {
+                Log.d("Mazo Editado", mazoEditado[0]+" "+mazoEditado[1]+" "+mazoEditado[2]+" "+mazoEditado[3]);
+                int[] mazoOriginal = convertirMazo();
+                Log.d("Mazo original", mazoOriginal[0]+" "+mazoOriginal[1]+" "+mazoOriginal[2]+" "+mazoOriginal[3]);
+
+                if (Arrays.equals(mazoEditado, convertirMazo())) {
                     //No hubo cambios
+                    Log.d("No hubo Cambios", "");
+
+                } else {
+                    //Hubo Cambios
+                    StringBuilder mazoBuilder = new StringBuilder();
+
+                    for (int i = 0; i < mazoEditado.length; i++) {
+                        // Agregar cada elemento al StringBuilder
+                        mazoBuilder.append(mazoEditado[i]);
+
+                        // Si no es el último elemento, agregar una coma
+                        if (i < mazoEditado.length - 1) {
+                            mazoBuilder.append(",");
+                        }
+                    }
+
+                    JugadorDAO.editarMazo(jugador.getGamertag(), mazoBuilder.toString(), new Callback<Jugador>() {
+                        @Override
+                        public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("Todo Bien", "");
+                                jugador.setMazo(mazoBuilder.toString());
+                                RecursosCompartidosViewModel.obtenerInstancia().setJugador(jugador);
+                            } else {
+                                Log.d("Todo Mal", "");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Jugador> call, Throwable t) {
+                            Log.d("Todo Mal", "");
+                        }
+                    });
                 }
 
             }
@@ -125,51 +172,52 @@ public class MazoFragment extends Fragment {
                 imagenClicada = ivInvocadoraActual;
             } else {
                 Log.d("Segunda Carta Clicada", "");
+                //Clicada Primero
                 Bitmap bitmapClicadaPrimero = convertirDrawableABitmap(imagenClicada.getDrawable());
                 String imagenClicadaPrimero = ConvertidorImagen.convertirBitmapAString(bitmapClicadaPrimero);
                 int idCartaClicadaPrimero = 0;
-                Log.d("imagen Clicada Primero", imagenClicadaPrimero);
-                for (Carta carta : listaCartas) {
-                    if (carta.getImagen() == imagenClicadaPrimero) {
-                        idCartaClicadaPrimero = carta.getIdCarta();
+                boolean clicadaPrimeroEsMazo = false;
+
+                for (ImageView ivClicadaPrimero: ivMazo) {
+                    if (imagenClicada == ivClicadaPrimero) {
+                        int index = ivMazo.indexOf(ivClicadaPrimero);
+                        idCartaClicadaPrimero = mazoEditado[index];
+                        clicadaPrimeroEsMazo = true;
                     }
                 }
 
+                for (ImageView ivClicadaPrimero: ivDisponible) {
+                    if (imagenClicada == ivClicadaPrimero) {
+                        int index = ivDisponible.indexOf(ivClicadaPrimero);
+                        idCartaClicadaPrimero = idCartasDisponible[index];
+                    }
+                }
+
+                //Clicada Actual
                 Bitmap bitmapClicadaActual = convertirDrawableABitmap(ivInvocadoraActual.getDrawable());
                 String imagenClicadaActual = ConvertidorImagen.convertirBitmapAString(bitmapClicadaActual);
                 int idCartaClicadaActual = 0;
-                for (Carta carta : listaCartas) {
-                    if (carta.getImagen() == imagenClicadaActual) {
-                        idCartaClicadaActual = carta.getIdCarta();
-                    }
-                }
-
-                boolean clicadaPrimeroEsMazo = false;
                 boolean clicadaActualEsMazo = false;
 
-                //Aqui debe controlar las idCarta en el mazoEditado
-
-                //Evaluar si pertenecen a la misma sección para no mover de disponible a disponible o mazo a mazo
-                for (int i = 0; i < mazoEditado.length; i++) {
-
-                    Log.d("IDCartaClicadaPrimero", String.valueOf(idCartaClicadaPrimero));
-                    Log.d("IDCartaClicadaActual", String.valueOf(idCartaClicadaActual));
-                    Log.d("mazoEditado[i]", String.valueOf(mazoEditado[i]));
-
-                    if (idCartaClicadaPrimero == mazoEditado[i]) {
-                        clicadaPrimeroEsMazo = true;
-                    }
-                    if (idCartaClicadaActual == mazoEditado[i]) {
+                for (ImageView ivClicadaActual: ivMazo) {
+                    if (ivInvocadoraActual == ivClicadaActual) {
+                        int index = ivMazo.indexOf(ivClicadaActual);
+                        idCartaClicadaActual = mazoEditado[index];
                         clicadaActualEsMazo = true;
                     }
                 }
 
-                Log.d("Clicada Primero Es MAZO", String.valueOf(clicadaPrimeroEsMazo));
-                Log.d("Clicada Actual Es MAZO", String.valueOf(clicadaActualEsMazo));
+                for (ImageView ivClicadaActual: ivDisponible) {
+                    if (ivInvocadoraActual == ivClicadaActual) {
+                        int index = ivDisponible.indexOf(ivClicadaActual);
+                        idCartaClicadaActual = idCartasDisponible[index];
+                    }
+                }
 
                 //Evaluar
                 if ((clicadaPrimeroEsMazo && clicadaActualEsMazo) || (!clicadaPrimeroEsMazo && !clicadaActualEsMazo)) {
                     Log.d("Entro en el IF", "");
+                    imagenClicada = null;
                 } else {
                     if (clicadaPrimeroEsMazo) {
                         for (int i = 0; i < mazoEditado.length; i++) {
@@ -225,6 +273,7 @@ public class MazoFragment extends Fragment {
                 System.out.println("La carta con id " + carta.getIdCarta() + " no está en el mazo.");
 
                 ivDisponible.get(contadorIVDisponible).setImageBitmap(ConvertidorImagen.convertirStringABitmap(carta.getImagen()));
+                idCartasDisponible[contadorIVDisponible] = carta.getIdCarta();
                 contadorIVDisponible++;
             }
         }

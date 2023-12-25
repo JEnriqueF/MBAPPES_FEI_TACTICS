@@ -53,6 +53,8 @@ public class Jugador implements Parcelable {
 
     public String getMazo() { return mazo; }
 
+    public void setMazo(String mazo) { this.mazo = mazo; }
+
     public int getIdFoto() { return idFoto; }
 
     @Override
