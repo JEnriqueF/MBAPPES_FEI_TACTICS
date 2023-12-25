@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,70 +63,37 @@ public class MazoFragment extends Fragment {
         ivMazo.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (imagenClicada == ivMazo.get(0)) {
-                    imagenClicada = null;
-                } else {
-
-                    if (imagenClicada == null) {
-                        imagenClicada = ivMazo.get(0);
-                    } else {
-                        Bitmap bitmapClicadaPrimero = convertirDrawableABitmap(imagenClicada.getDrawable());
-                        String imagenClicadaPrimero = ConvertidorImagen.convertirBitmapAString(bitmapClicadaPrimero);
-                        int idCartaClicadaPrimero = 0;
-                        for (Carta carta : listaCartas) {
-                            if (carta.getImagen() == imagenClicadaPrimero) {
-                                idCartaClicadaPrimero = carta.getIdCarta();
-                            }
-                        }
-
-                        Bitmap bitmapClicadaActual = convertirDrawableABitmap(ivMazo.get(0).getDrawable());
-                        String imagenClicadaActual = ConvertidorImagen.convertirBitmapAString(bitmapClicadaActual);
-                        int idCartaClicadaActual = 0;
-                        for (Carta carta : listaCartas) {
-                            if (carta.getImagen() == imagenClicadaActual) {
-                                idCartaClicadaActual = carta.getIdCarta();
-                            }
-                        }
-
-                        boolean clicadaPrimeroEsMazo = false;
-                        boolean clicadaActualEsMazo = false;
-
-                        //Aqui debe controlar las idCarta en el mazoEditado
-
-                        //Evaluar si pertenecen a la misma sección para no mover de disponible a disponible o mazo a mazo
-                        for (int i = 0; i < mazoEditado.length; i++) {
-                            if (idCartaClicadaPrimero == mazoEditado[i]) {
-                                clicadaPrimeroEsMazo = true;
-                            }
-                            if (idCartaClicadaActual == mazoEditado[i]) {
-                                clicadaActualEsMazo = true;
-                            }
-                        }
-
-                        //Evaluar
-                        if ((clicadaPrimeroEsMazo && clicadaPrimeroEsMazo) || (!clicadaActualEsMazo && !clicadaActualEsMazo)) {
-
-                        } else {
-                            if (clicadaPrimeroEsMazo) {
-                                for (int i = 0; i < mazoEditado.length; i++) {
-                                    if (idCartaClicadaPrimero == mazoEditado[i]) {
-                                        mazoEditado[i] = idCartaClicadaActual;
-                                    }
-                                }
-
-                            } else if (clicadaActualEsMazo) {
-                                for (int i = 0; i < mazoEditado.length; i++) {
-                                    if (idCartaClicadaActual == mazoEditado[i]) {
-                                        mazoEditado[i] = idCartaClicadaPrimero;
-                                    }
-                                }
-                            }
-                            ivMazo.get(0).setImageBitmap(bitmapClicadaPrimero);
-                            imagenClicada.setImageBitmap(bitmapClicadaActual);
-                        }
-                    }
-                }
+                moverCartas(ivMazo.get(0));
+            }
+        });
+        ivMazo.get(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moverCartas(ivMazo.get(1));
+            }
+        });
+        ivMazo.get(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moverCartas(ivMazo.get(2));
+            }
+        });
+        ivMazo.get(3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moverCartas(ivMazo.get(3));
+            }
+        });
+        ivDisponible.get(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moverCartas(ivDisponible.get(0));
+            }
+        });
+        ivDisponible.get(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moverCartas(ivDisponible.get(1));
             }
         });
 
@@ -145,6 +113,85 @@ public class MazoFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void moverCartas(ImageView ivInvocadoraActual) {
+        if (imagenClicada == ivInvocadoraActual) {
+            Log.d("Misma Carta CLicada", "");
+            imagenClicada = null;
+        } else {
+            if (imagenClicada == null) {
+                Log.d("Primera Carta Clicada", "");
+                imagenClicada = ivInvocadoraActual;
+            } else {
+                Log.d("Segunda Carta Clicada", "");
+                Bitmap bitmapClicadaPrimero = convertirDrawableABitmap(imagenClicada.getDrawable());
+                String imagenClicadaPrimero = ConvertidorImagen.convertirBitmapAString(bitmapClicadaPrimero);
+                int idCartaClicadaPrimero = 0;
+                Log.d("imagen Clicada Primero", imagenClicadaPrimero);
+                for (Carta carta : listaCartas) {
+                    if (carta.getImagen() == imagenClicadaPrimero) {
+                        idCartaClicadaPrimero = carta.getIdCarta();
+                    }
+                }
+
+                Bitmap bitmapClicadaActual = convertirDrawableABitmap(ivInvocadoraActual.getDrawable());
+                String imagenClicadaActual = ConvertidorImagen.convertirBitmapAString(bitmapClicadaActual);
+                int idCartaClicadaActual = 0;
+                for (Carta carta : listaCartas) {
+                    if (carta.getImagen() == imagenClicadaActual) {
+                        idCartaClicadaActual = carta.getIdCarta();
+                    }
+                }
+
+                boolean clicadaPrimeroEsMazo = false;
+                boolean clicadaActualEsMazo = false;
+
+                //Aqui debe controlar las idCarta en el mazoEditado
+
+                //Evaluar si pertenecen a la misma sección para no mover de disponible a disponible o mazo a mazo
+                for (int i = 0; i < mazoEditado.length; i++) {
+
+                    Log.d("IDCartaClicadaPrimero", String.valueOf(idCartaClicadaPrimero));
+                    Log.d("IDCartaClicadaActual", String.valueOf(idCartaClicadaActual));
+                    Log.d("mazoEditado[i]", String.valueOf(mazoEditado[i]));
+
+                    if (idCartaClicadaPrimero == mazoEditado[i]) {
+                        clicadaPrimeroEsMazo = true;
+                    }
+                    if (idCartaClicadaActual == mazoEditado[i]) {
+                        clicadaActualEsMazo = true;
+                    }
+                }
+
+                Log.d("Clicada Primero Es MAZO", String.valueOf(clicadaPrimeroEsMazo));
+                Log.d("Clicada Actual Es MAZO", String.valueOf(clicadaActualEsMazo));
+
+                //Evaluar
+                if ((clicadaPrimeroEsMazo && clicadaActualEsMazo) || (!clicadaPrimeroEsMazo && !clicadaActualEsMazo)) {
+                    Log.d("Entro en el IF", "");
+                } else {
+                    if (clicadaPrimeroEsMazo) {
+                        for (int i = 0; i < mazoEditado.length; i++) {
+                            if (idCartaClicadaPrimero == mazoEditado[i]) {
+                                mazoEditado[i] = idCartaClicadaActual;
+                            }
+                        }
+
+                    } else if (clicadaActualEsMazo) {
+                        for (int i = 0; i < mazoEditado.length; i++) {
+                            if (idCartaClicadaActual == mazoEditado[i]) {
+                                mazoEditado[i] = idCartaClicadaPrimero;
+                            }
+                        }
+                    }
+                    ivInvocadoraActual.setImageBitmap(bitmapClicadaPrimero);
+                    imagenClicada.setImageBitmap(bitmapClicadaActual);
+                    imagenClicada = null;
+                    Log.d("Mazo Editado", mazoEditado[0]+" "+mazoEditado[1]+" "+mazoEditado[2]+" "+mazoEditado[3]);
+                }
+            }
+        }
     }
 
     private void mostrarCartas() {
@@ -182,7 +229,6 @@ public class MazoFragment extends Fragment {
             }
         }
     }
-
 
     // Función para convertir un String de números separados por comas a un array de enteros
     public int[] convertirMazo() {
