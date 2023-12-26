@@ -17,6 +17,9 @@
         android:theme="@style/Theme.MbappesFEITactics"
         tools:targetApi="31">
         <activity
+            android:name=".Vista.Partida"
+            android:exported="false" />
+        <activity
             android:name=".Vista.Lobby"
             android:exported="false" />
         <activity
