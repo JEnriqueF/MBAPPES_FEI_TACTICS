@@ -23,7 +23,7 @@ public class Lobby extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLobbyBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_lobby);
+        setContentView(binding.getRoot());
 
         binding.btnCancelar.setEnabled(true);
 

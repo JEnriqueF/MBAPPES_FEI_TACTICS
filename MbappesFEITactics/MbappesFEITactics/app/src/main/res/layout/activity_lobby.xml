@@ -40,7 +40,7 @@
             android:backgroundTint="@color/cancel_red"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textSize="30dp"
+            android:textSize="30sp"
             tools:layout_editor_absoluteX="50dp"
             tools:layout_editor_absoluteY="525dp" />
 
