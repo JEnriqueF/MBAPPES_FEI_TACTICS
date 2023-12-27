@@ -28,7 +28,7 @@
             android:textSize="60sp" />
 
         <Button
-            android:id="@+id/btnJugar"
+            android:id="@+id/btnCancelar"
             android:layout_width="230dp"
             android:layout_height="100dp"
             android:layout_marginStart="8dp"
