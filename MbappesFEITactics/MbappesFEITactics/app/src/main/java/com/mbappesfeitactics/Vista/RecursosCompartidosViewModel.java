@@ -13,6 +13,7 @@ public class RecursosCompartidosViewModel {
     private List<Carta> cartas;
     private List<FotosPerfil> fotosPerfil;
     private Jugador jugador;
+    private Jugador adversario;
 
     // Constructor privado para evitar instanciación directa
     private RecursosCompartidosViewModel() {
@@ -20,6 +21,7 @@ public class RecursosCompartidosViewModel {
         cartas = null; // Reemplaza null con la inicialización adecuada
         fotosPerfil = null; // Reemplaza null con la inicialización adecuada
         jugador = new Jugador(); // Inicializa el jugador, puedes personalizar esto según tus necesidades
+        adversario = new Jugador();
     }
 
     // Método para obtener la instancia única del singleton
@@ -56,4 +58,8 @@ public class RecursosCompartidosViewModel {
     public void setJugador(Jugador jugador) {
         this.jugador = jugador;
     }
+
+    // Getters y setters para adversario
+    public Jugador getAdversario() { return adversario; }
+    public void setAdversario(Jugador adversario) { this.adversario = adversario; }
 }

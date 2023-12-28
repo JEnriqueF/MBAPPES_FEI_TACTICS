@@ -27,9 +27,34 @@ public class MatchmakingDAO {
             public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
                 if(response.isSuccessful()){
                     RespuestaMatchmaking respuestaMatchmakingSolicitada = response.body();
-                    Log.d("Respuesta", respuestaMatchmakingSolicitada.getRespuesta());
                     callback.onResponse(call, Response.success(respuestaMatchmakingSolicitada));
                 }else{
+                    callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaMatchmaking> call, Throwable t) {
+                Log.d("Prueba","Error en la conexión");
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
+    public static void cancelarBusqueda(String gamertag, final Callback<RespuestaMatchmaking> callback) {
+        Retrofit retrofit = APIClient.iniciarAPI();
+        MatchmakingService matchmakingService = retrofit.create(MatchmakingService.class);
+        Map<String, String> jugador = new HashMap<>();
+        jugador.put("Gamertag", gamertag);
+        Call<RespuestaMatchmaking> call = matchmakingService.cancelarBusqueda(jugador);
+
+        call.enqueue(new Callback<RespuestaMatchmaking>() {
+            @Override
+            public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
+                if (response.isSuccessful()) {
+                    RespuestaMatchmaking respuestaMatchmakingSolicitada = response.body();
+                    callback.onResponse(call, Response.success(respuestaMatchmakingSolicitada));
+                } else {
                     callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
                 }
             }

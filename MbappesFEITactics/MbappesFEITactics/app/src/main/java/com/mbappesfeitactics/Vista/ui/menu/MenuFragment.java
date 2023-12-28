@@ -48,7 +48,7 @@ public class MenuFragment extends Fragment {
         return root;
     }
 
-    private boolean solicitarPartida(){
+    private void solicitarPartida(){
         MatchmakingDAO.solicitarPartida(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), new Callback<RespuestaMatchmaking>() {
             @Override
             public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {

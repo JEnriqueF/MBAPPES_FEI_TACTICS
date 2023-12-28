@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
@@ -24,4 +25,7 @@ public interface JugadorService {
 
     @PUT("/jugador/modificarimagenperfil")
     Call<Jugador> editarFotoPerfil(@Body Map<String, Object> datosEditar);
+
+    @GET("/jugador/recuperaroponente")
+    Call<Jugador> recuperarOponente(@Body Map<String, String> gamertag);
 }
