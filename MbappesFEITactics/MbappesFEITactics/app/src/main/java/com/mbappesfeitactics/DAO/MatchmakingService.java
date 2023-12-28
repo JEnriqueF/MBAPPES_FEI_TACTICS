@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 
 public interface MatchmakingService {
     @POST("/matchmaking/solicitarpartida")
-    Call<RespuestaMatchmaking> solicitarPartida(@Body String jugadorSolicitado);
+    Call<RespuestaMatchmaking> solicitarPartida(@Body Map<String, String> jugadorSolicitado);
 
     @POST("/matchmaking/cancelarpartida")
     Call<RespuestaMatchmaking> cancelarPartida(@Body String jugadorCancelado);

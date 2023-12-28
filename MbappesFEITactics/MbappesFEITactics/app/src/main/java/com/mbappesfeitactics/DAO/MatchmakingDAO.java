@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.mbappesfeitactics.POJO.Jugador;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -15,13 +18,16 @@ public class MatchmakingDAO {
         Retrofit retrofit = APIClient.iniciarAPI();
         MatchmakingService matchmakingService = retrofit.create(MatchmakingService.class);
 
-        Call<RespuestaMatchmaking> call = matchmakingService.solicitarPartida(gamertag);
+        Map<String, String> jugador = new HashMap<>();
+        jugador.put("Gamertag", gamertag);
+        Call<RespuestaMatchmaking> call = matchmakingService.solicitarPartida(jugador);
 
         call.enqueue(new Callback<RespuestaMatchmaking>() {
             @Override
             public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
                 if(response.isSuccessful()){
                     RespuestaMatchmaking respuestaMatchmakingSolicitada = response.body();
+                    Log.d("Respuesta", respuestaMatchmakingSolicitada.getRespuesta());
                     callback.onResponse(call, Response.success(respuestaMatchmakingSolicitada));
                 }else{
                     callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
