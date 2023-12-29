@@ -26,6 +26,6 @@ public interface JugadorService {
     @PUT("/jugador/modificarimagenperfil")
     Call<Jugador> editarFotoPerfil(@Body Map<String, Object> datosEditar);
 
-    @GET("/jugador/recuperaroponente")
+    @POST("/jugador/recuperaroponente")
     Call<Jugador> recuperarOponente(@Body Map<String, String> gamertag);
 }

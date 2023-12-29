@@ -127,16 +127,19 @@ public class JugadorDAO {
     }
 
     public static void recuperarOponente(String gamertagRecibido, final Callback<Jugador> callback) {
+        Log.d("Entró a DAO", "");
         Retrofit retrofit = APIClient.iniciarAPI();
         JugadorService jugadorService = retrofit.create(JugadorService.class);
 
         Map<String, String> gamertag = new HashMap<>();
         gamertag.put("Gamertag", gamertagRecibido);
         Call<Jugador> call = jugadorService.recuperarOponente(gamertag);
+        Log.d("Map", gamertag.toString());
 
         call.enqueue(new Callback<Jugador>() {
             @Override
             public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                Log.d("Si hay respuesta", "");
                 if (response.isSuccessful()) {
                     Jugador jugadorOponente = response.body();
                     callback.onResponse(call, Response.success(jugadorOponente));
