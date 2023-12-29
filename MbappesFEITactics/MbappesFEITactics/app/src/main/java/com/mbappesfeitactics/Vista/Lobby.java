@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.DAO.MatchmakingDAO;
 import com.mbappesfeitactics.DAO.RespuestaMatchmaking;
 import com.mbappesfeitactics.POJO.Jugador;
@@ -25,6 +26,7 @@ public class Lobby extends AppCompatActivity {
     Jugador jugador = RecursosCompartidosViewModel.obtenerInstancia().getJugador();
 
     ActivityLobbyBinding binding;
+    Jugador jugadorOponente;
 
     int contadorEspera;
 
@@ -35,6 +37,7 @@ public class Lobby extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         contadorEspera = 0;
+        jugadorOponente = null;
 
         binding.btnCancelar.setEnabled(true);
 
@@ -81,7 +84,7 @@ public class Lobby extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (contadorEspera < 6) {
+                            if (contadorEspera < 7) {
                                 contadorEspera++;
                                 solicitarPartida();
                             } else {
@@ -90,8 +93,9 @@ public class Lobby extends AppCompatActivity {
                         }
                     }, 10000);
                 } else if (response.body().getGamertag() != null) {
-                    Jugador adversario = new Jugador();
-                    adversario.setGamertag(response.body().getGamertag());
+                    Jugador adversario;
+                    recuperarOponente(response.body().getGamertag());
+                    adversario = jugadorOponente;
                     RecursosCompartidosViewModel.obtenerInstancia().setAdversario(adversario);
                     Intent intent = new Intent(getApplicationContext(), Partida.class);
                     startActivity(intent);
@@ -102,6 +106,20 @@ public class Lobby extends AppCompatActivity {
             @Override
             public void onFailure(Call<RespuestaMatchmaking> call, Throwable t) {
                 Log.d("Fallo", "");
+            }
+        });
+    }
+
+    private void recuperarOponente(String gamertag) {
+        JugadorDAO.recuperarOponente(gamertag, new Callback<Jugador>() {
+            @Override
+            public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                jugadorOponente = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Jugador> call, Throwable t) {
+                //error
             }
         });
     }

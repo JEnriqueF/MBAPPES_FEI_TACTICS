@@ -126,4 +126,30 @@ public class JugadorDAO {
         });
     }
 
+    public static void recuperarOponente(String gamertagRecibido, final Callback<Jugador> callback) {
+        Retrofit retrofit = APIClient.iniciarAPI();
+        JugadorService jugadorService = retrofit.create(JugadorService.class);
+
+        Map<String, String> gamertag = new HashMap<>();
+        gamertag.put("Gamertag", gamertagRecibido);
+        Call<Jugador> call = jugadorService.recuperarOponente(gamertag);
+
+        call.enqueue(new Callback<Jugador>() {
+            @Override
+            public void onResponse(Call<Jugador> call, Response<Jugador> response) {
+                if (response.isSuccessful()) {
+                    Jugador jugadorOponente = response.body();
+                    callback.onResponse(call, Response.success(jugadorOponente));
+                } else {
+                    callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Jugador> call, Throwable t) {
+                callback.onFailure(call, t);
+            }
+        });
+    }
+
 }
