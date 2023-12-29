@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Partida extends AppCompatActivity {
-
+/*
     ActivityPartidaBinding binding;
     private List<Carta> listaCartas;
     private Jugador jugador;
@@ -64,6 +64,8 @@ public class Partida extends AppCompatActivity {
         mostrarCartas();
         mostrarEscenarios();
     }
+
+
 
     private void mostrarCartas(){
         int[] mazo = convertirMazo();
@@ -126,4 +128,6 @@ public class Partida extends AppCompatActivity {
         }
         return bitmap;
     }
+
+ */
 }

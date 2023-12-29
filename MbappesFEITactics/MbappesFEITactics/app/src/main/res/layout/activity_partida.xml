@@ -148,6 +148,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal|center_vertical">
+
+            <Button
+                android:id="@+id/btnTerminarTurno"
+                android:layout_width="150dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Terminar Turno"
+                android:textSize="10dp"
+                android:background="@color/fei_blue"/>
+
+            <Button
+                android:id="@+id/btnAbandonarPartida"
+                android:layout_width="150dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+                android:text="Abandonar Partida"
+                android:textSize="10dp"
+                android:background="@color/fei_blue" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center_vertical|center_horizontal">
