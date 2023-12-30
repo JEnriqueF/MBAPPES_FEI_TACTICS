@@ -62,6 +62,10 @@ public class Partida extends AppCompatActivity {
         mazoPartida = convertirMazo();
         imagenClicada = null;
 
+        for (int i = 0; i < idCartasTableroJugador.length; i++) {
+            idCartasTableroJugador[i] = -1;
+        }
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -126,7 +130,15 @@ public class Partida extends AppCompatActivity {
 
         binding.btnTerminarTurno.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {  }
+            public void onClick(View v) {
+                ArrayList<int[]> listaMovimientos = new ArrayList<>();
+                for (int i = 0; i < idCartasTableroJugador.length; i++) {
+                    if (idCartasTableroJugador[i] != -1) {
+                        int[] movimiento = {i, idCartasTableroJugador[i] };
+                        listaMovimientos.add(movimiento);
+                    }
+                }
+            }
         });
 
         binding.btnAbandonarPartida.setOnClickListener(new View.OnClickListener() {
