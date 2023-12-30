@@ -221,11 +221,21 @@ public class MazoFragment extends Fragment {
                                 mazoEditado[i] = idCartaClicadaActual;
                             }
                         }
+                        for (int i = 0; i < idCartasDisponible.length; i++) {
+                            if (idCartaClicadaActual == idCartasDisponible[i]) {
+                                idCartasDisponible[i] = idCartaClicadaPrimero;
+                            }
+                        }
 
                     } else if (clicadaActualEsMazo) {
                         for (int i = 0; i < mazoEditado.length; i++) {
                             if (idCartaClicadaActual == mazoEditado[i]) {
                                 mazoEditado[i] = idCartaClicadaPrimero;
+                            }
+                        }
+                        for (int i = 0; i < idCartasDisponible.length; i++) {
+                            if (idCartaClicadaPrimero == idCartasDisponible[i]) {
+                                idCartasDisponible[i] = idCartaClicadaActual;
                             }
                         }
                     }
