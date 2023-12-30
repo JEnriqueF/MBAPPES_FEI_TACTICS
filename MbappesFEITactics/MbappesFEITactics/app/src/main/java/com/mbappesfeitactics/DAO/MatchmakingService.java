@@ -19,6 +19,6 @@ public interface MatchmakingService {
     Call<RespuestaMatchmaking> cancelarPartida(@Body String jugadorCancelado);
 
     @POST("/matchmaking/jugarturno")
-    Call<RespuestaPartida> jugarTurno(@Body Map<String, String> movimientos);
+    Call<RespuestaPartida> jugarTurno(@Body Map<String, Object> movimientos);
 
 }
