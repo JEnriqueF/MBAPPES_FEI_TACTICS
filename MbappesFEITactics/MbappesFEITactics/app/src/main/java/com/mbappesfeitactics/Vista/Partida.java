@@ -50,6 +50,7 @@ public class Partida extends AppCompatActivity {
     private List<FotosPerfil> listaFotosPerfil;
 
     private ImageView imagenClicada;
+    private boolean movimientoConsultadoAnterior = false;
     private int turno = 1;
 
 
@@ -325,16 +326,6 @@ public class Partida extends AppCompatActivity {
         }
     }
 
-    private void bucleJugarTurno(PartidaRequest partidaRequest) {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                jugarTurno(partidaRequest);
-            }
-        }, 10000);
-    }
-
     private void jugarTurno(PartidaRequest partidaRequest) {
         final Handler handler = new Handler();
         final int[] contadorEspera = {0};
@@ -355,6 +346,9 @@ public class Partida extends AppCompatActivity {
 
                 if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Turno Jugado") || respuestaPartida.getRespuesta().equals("Ya se jugó un movimiento para Jugador en este turno"))) {
                     Log.d("IF 1", "");
+
+                    bloquearTurno();
+
                     //Mandar jugarTurno otra vez cada 10 segs maximo 1 min
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -371,12 +365,14 @@ public class Partida extends AppCompatActivity {
                     Log.d("IF 2", "");
                     //Poner las cartas recibidas y cambiar turno
                     //Bloquear las cartas que y se jugaron
+                    movimientoConsultadoAnterior = true;
                      List<Movimiento> listaMovimientos = respuestaPartida.getListaMovimientos();
                      colocarCartasEnemigo(listaMovimientos);
                     if (turno == 4) {
                         jugarTurno(partidaRequest);
                     }
                     turno++;
+                    habilitarTurno();
                 } else if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Juego terminado") || respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida")) && turno == 4) {
                     Log.d("IF 3", "");
                     //Terminar Juego
@@ -404,6 +400,35 @@ public class Partida extends AppCompatActivity {
             }
             ivCartasEnemigo.get(movimiento.getIdEscenario()).setImageBitmap(ConvertidorImagen.convertirStringABitmap(listaCartas.get(indexCarta).getImagen()));
             idCartasTableroEnemigo[movimiento.getIdEscenario()] = movimiento.getIdCarta();
+        }
+    }
+
+    public void habilitarTurno() {
+        binding.btnTerminarTurno.setEnabled(true);
+        for (ImageView ivCartaMazo : ivMazo) {
+            ivCartaMazo.setEnabled(true);
+        }
+        for (ImageView ivCartaTableroJugador : ivCartasTableroJugador) {
+            ivCartaTableroJugador.setEnabled(true);
+        }
+        deshabilitarIVJugado();
+    }
+
+    public void deshabilitarIVJugado() {
+        for (int i = 0; i < idCartasTableroJugador.length; i++) {
+            if (idCartasTableroJugador[i] != -1) {
+                ivCartasTableroJugador.get(i).setEnabled(false);
+            }
+        }
+    }
+
+    public void bloquearTurno() {
+        binding.btnTerminarTurno.setEnabled(false);
+        for (ImageView ivCartaMazo : ivMazo) {
+            ivCartaMazo.setEnabled(false);
+        }
+        for (ImageView ivCartaTableroJugador : ivCartasTableroJugador) {
+            ivCartaTableroJugador.setEnabled(false);
         }
     }
 
