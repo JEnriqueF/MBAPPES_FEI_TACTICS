@@ -342,9 +342,20 @@ public class Partida extends AppCompatActivity {
             @Override
             public void onResponse(Call<RespuestaPartida> call, Response<RespuestaPartida> response) {
                 RespuestaPartida respuestaPartida = response.body();
-                if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Turno Guardado") || respuestaPartida.getRespuesta().equals("Ya se jugó un movimiento para Jugador en este turno"))) {
-                    //Mandar jugarTurno otra vez cada 10 segs maximo 1 min
+
+                if (respuestaPartida.getRespuesta() != null) {
                     Log.d("Respuesta", respuestaPartida.getRespuesta());
+                }
+                if (respuestaPartida.getListaMovimientos() != null) {
+                    for (Movimiento movimiento : respuestaPartida.getListaMovimientos()) {
+                        Log.d("Movimiento Recibido", movimiento.getIdEscenario()+" "+ movimiento.getIdCarta());
+                    }
+                    Log.d("Respuesta", respuestaPartida.getListaMovimientos().toString());
+                }
+
+                if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Turno Jugado") || respuestaPartida.getRespuesta().equals("Ya se jugó un movimiento para Jugador en este turno"))) {
+                    Log.d("IF 1", "");
+                    //Mandar jugarTurno otra vez cada 10 segs maximo 1 min
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -357,6 +368,7 @@ public class Partida extends AppCompatActivity {
                         }
                     }, 10000);
                 } else if (respuestaPartida.getListaMovimientos() != null) {
+                    Log.d("IF 2", "");
                     //Poner las cartas recibidas y cambiar turno
                     //Bloquear las cartas que y se jugaron
                      List<Movimiento> listaMovimientos = respuestaPartida.getListaMovimientos();
@@ -366,8 +378,10 @@ public class Partida extends AppCompatActivity {
                     }
                     turno++;
                 } else if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Juego terminado") || respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida")) && turno == 4) {
+                    Log.d("IF 3", "");
                     //Terminar Juego
                 } else if (respuestaPartida.getRespuesta() != null && respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida") && turno < 4) {
+                    Log.d("IF 4", "");
                     //El otro jugador cancelo la partida
                 }
             }
@@ -381,7 +395,14 @@ public class Partida extends AppCompatActivity {
 
     private void colocarCartasEnemigo(List<Movimiento> listaMovimientos) {
         for (Movimiento movimiento : listaMovimientos) {
-            ivCartasEnemigo.get(movimiento.getIdEscenario()).setImageBitmap(ConvertidorImagen.convertirStringABitmap(listaCartas.get(movimiento.getIdCarta()).getImagen()));
+            Log.d("IdEscenario", String.valueOf(movimiento.getIdEscenario()));
+            int indexCarta = -1;
+            for (int i = 0; i < listaCartas.size(); i++) {
+                if (listaCartas.get(i).getIdCarta() == movimiento.getIdCarta()) {
+                    indexCarta = i;
+                }
+            }
+            ivCartasEnemigo.get(movimiento.getIdEscenario()).setImageBitmap(ConvertidorImagen.convertirStringABitmap(listaCartas.get(indexCarta).getImagen()));
             idCartasTableroEnemigo[movimiento.getIdEscenario()] = movimiento.getIdCarta();
         }
     }
