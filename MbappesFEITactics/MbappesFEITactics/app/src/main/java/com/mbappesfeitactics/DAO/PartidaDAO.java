@@ -14,12 +14,12 @@ import retrofit2.Retrofit;
 
 public class PartidaDAO {
 
-    public static void jugarTurno(String gamertag, PartidaRequest solicitudPartida, final Callback<RespuestaPartida> callback) {
+    public static void jugarTurno(PartidaRequest solicitudPartida, final Callback<RespuestaPartida> callback) {
         Retrofit retrofit = APIClient.iniciarAPI();
         MatchmakingService matchmakingService = retrofit.create(MatchmakingService.class);
 
         Map<String, Object> solicitud = new HashMap<>();
-        solicitud.put("Gamertag", gamertag);
+        solicitud.put("Gamertag", solicitudPartida.getGamertag());
         solicitud.put("Movimientos", solicitudPartida.getListaMovimientos());
         Call<RespuestaPartida> call = matchmakingService.jugarTurno(solicitud);
 

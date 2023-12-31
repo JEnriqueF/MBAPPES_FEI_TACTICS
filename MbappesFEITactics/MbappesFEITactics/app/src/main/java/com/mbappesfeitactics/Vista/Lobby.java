@@ -96,7 +96,7 @@ public class Lobby extends AppCompatActivity {
                     handler1.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (contadorEspera < 7) {
+                            if (contadorEspera < 6) {
                                 contadorEspera++;
                                 solicitarPartida();
                             } else {

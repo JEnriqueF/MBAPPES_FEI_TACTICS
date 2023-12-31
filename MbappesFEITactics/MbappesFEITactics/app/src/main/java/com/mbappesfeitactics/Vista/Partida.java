@@ -14,11 +14,15 @@ import android.widget.ImageView;
 
 import com.mbappesfeitactics.ConvertidorImagen;
 import com.mbappesfeitactics.DAO.EscenarioDAO;
+import com.mbappesfeitactics.DAO.PartidaDAO;
+import com.mbappesfeitactics.DAO.PartidaRequest;
 import com.mbappesfeitactics.DAO.RespuestaEscenarios;
+import com.mbappesfeitactics.DAO.RespuestaPartida;
 import com.mbappesfeitactics.POJO.Carta;
 import com.mbappesfeitactics.POJO.Escenario;
 import com.mbappesfeitactics.POJO.FotosPerfil;
 import com.mbappesfeitactics.POJO.Jugador;
+import com.mbappesfeitactics.POJO.Movimiento;
 import com.mbappesfeitactics.R;
 import com.mbappesfeitactics.databinding.ActivityPartidaBinding;
 
@@ -40,11 +44,13 @@ public class Partida extends AppCompatActivity {
     private ArrayList<ImageView> ivEscenarios = new ArrayList<>();
     private List<Escenario> listaEscenarios;
     private ArrayList<ImageView> ivCartasEnemigo = new ArrayList<>();
+    private int[] idCartasTableroEnemigo = new int[3];
     private ArrayList<ImageView> ivCartasTableroJugador = new ArrayList<>();
     private int[] idCartasTableroJugador = new int[3];
     private List<FotosPerfil> listaFotosPerfil;
 
     private ImageView imagenClicada;
+    private int turno = 1;
 
 
     @Override
@@ -64,6 +70,16 @@ public class Partida extends AppCompatActivity {
 
         for (int i = 0; i < idCartasTableroJugador.length; i++) {
             idCartasTableroJugador[i] = -1;
+        }
+        for (int i = 0; i < idCartasTableroJugador.length; i++) {
+            Log.d("ID'sCartasTableroJugador", String.valueOf(idCartasTableroJugador[i]));
+        }
+
+        for (int i = 0; i < idCartasTableroEnemigo.length; i++) {
+            idCartasTableroEnemigo[i] = -1;
+        }
+        for (int i = 0; i < idCartasTableroEnemigo.length; i++) {
+            Log.d("ID'sCartasTableroJugador", String.valueOf(idCartasTableroEnemigo[i]));
         }
 
         try {
@@ -131,13 +147,19 @@ public class Partida extends AppCompatActivity {
         binding.btnTerminarTurno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<int[]> listaMovimientos = new ArrayList<>();
+                List<Movimiento> listaMovimientos = new ArrayList<>();
                 for (int i = 0; i < idCartasTableroJugador.length; i++) {
+                    Log.d("idCartaTableroJugador"+i, String.valueOf(idCartasTableroJugador[i]));
                     if (idCartasTableroJugador[i] != -1) {
-                        int[] movimiento = {i, idCartasTableroJugador[i] };
+                        Movimiento movimiento = new Movimiento(i, idCartasTableroJugador[i]);
                         listaMovimientos.add(movimiento);
                     }
                 }
+
+                PartidaRequest partidaRequest = new PartidaRequest(jugador.getGamertag(), listaMovimientos);
+
+                jugarTurno(partidaRequest);
+
             }
         });
 
@@ -201,31 +223,49 @@ public class Partida extends AppCompatActivity {
                 } else {
                     //Cambio de ID´s
                     if (clicadaPrimeroEsMazo) {
+
+                        int indexMazo = -1;
                         for (int i = 0; i < mazoPartida.length; i++) {
-                            if (idCartaClicadaPrimero == mazoPartida[i]) {
-                                mazoPartida[i] = idCartaClicadaActual;
+                            if (imagenClicada == ivMazo.get(i)) {
+                                indexMazo = i;
                             }
                         }
+
+                        int indexTableroJugador = -1;
                         for (int i = 0; i < idCartasTableroJugador.length; i++) {
-                            if (idCartaClicadaActual == idCartasTableroJugador[i]) {
-                                idCartasTableroJugador[i] = idCartaClicadaPrimero;
+                            if (ivInvocadoraActual == ivCartasTableroJugador.get(i)) {
+                                indexTableroJugador = i;
                             }
                         }
+
+                        mazoPartida[indexMazo] = idCartaClicadaActual;
+                        idCartasTableroJugador[indexTableroJugador] = idCartaClicadaPrimero;
+
                     } else if (clicadaActualEsMazo) {
+
+                        int indexMazo = -1;
                         for (int i = 0; i < mazoPartida.length; i++) {
-                            if (idCartaClicadaActual == mazoPartida[i]) {
-                                mazoPartida[i] = idCartaClicadaPrimero;
+                            if (ivInvocadoraActual == ivMazo.get(i)) {
+                                indexMazo = i;
                             }
                         }
+
+                        int indexTableroJugador = -1;
                         for (int i = 0; i < idCartasTableroJugador.length; i++) {
-                            if (idCartaClicadaPrimero == idCartasTableroJugador[i]) {
-                                idCartasTableroJugador[i] = idCartaClicadaActual;
+                            if (imagenClicada == ivCartasTableroJugador.get(i)) {
+                                indexTableroJugador = i;
                             }
                         }
+
+                        mazoPartida[indexMazo] = idCartaClicadaPrimero;
+                        idCartasTableroJugador[indexTableroJugador] = idCartaClicadaActual;
                     }
                     ivInvocadoraActual.setImageBitmap(bitmapClicadaPrimero);
                     imagenClicada.setImageBitmap(bitmapClicadaActual);
                     imagenClicada = null;
+
+                    Log.d("ID's TableroJugador", idCartasTableroJugador[0]+" "+idCartasTableroJugador[1]+" "+idCartasTableroJugador[2]);
+                    Log.d("ID´s Mazo", mazoPartida[0]+" "+mazoPartida[1]+" "+mazoPartida[2]+" "+mazoPartida[3]);
                 }
             }
         }
@@ -282,6 +322,67 @@ public class Partida extends AppCompatActivity {
         for (Escenario escenario : listaEscenarios) {
             ivEscenarios.get(contadorEscenario).setImageBitmap(ConvertidorImagen.convertirStringABitmap(escenario.getImagen()));
             contadorEscenario++;
+        }
+    }
+
+    private void bucleJugarTurno(PartidaRequest partidaRequest) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                jugarTurno(partidaRequest);
+            }
+        }, 10000);
+    }
+
+    private void jugarTurno(PartidaRequest partidaRequest) {
+        final Handler handler = new Handler();
+        final int[] contadorEspera = {0};
+        PartidaDAO.jugarTurno(partidaRequest, new Callback<RespuestaPartida>() {
+            @Override
+            public void onResponse(Call<RespuestaPartida> call, Response<RespuestaPartida> response) {
+                RespuestaPartida respuestaPartida = response.body();
+                if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Turno Guardado") || respuestaPartida.getRespuesta().equals("Ya se jugó un movimiento para Jugador en este turno"))) {
+                    //Mandar jugarTurno otra vez cada 10 segs maximo 1 min
+                    Log.d("Respuesta", respuestaPartida.getRespuesta());
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (contadorEspera[0] < 6) {
+                                contadorEspera[0]++;
+                                jugarTurno(partidaRequest);
+                            } else {
+                                //controlar la condición
+                            }
+                        }
+                    }, 10000);
+                } else if (respuestaPartida.getListaMovimientos() != null) {
+                    //Poner las cartas recibidas y cambiar turno
+                    //Bloquear las cartas que y se jugaron
+                     List<Movimiento> listaMovimientos = respuestaPartida.getListaMovimientos();
+                     colocarCartasEnemigo(listaMovimientos);
+                    if (turno == 4) {
+                        jugarTurno(partidaRequest);
+                    }
+                    turno++;
+                } else if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Juego terminado") || respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida")) && turno == 4) {
+                    //Terminar Juego
+                } else if (respuestaPartida.getRespuesta() != null && respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida") && turno < 4) {
+                    //El otro jugador cancelo la partida
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaPartida> call, Throwable t) {
+                //Fallo
+            }
+        });
+    }
+
+    private void colocarCartasEnemigo(List<Movimiento> listaMovimientos) {
+        for (Movimiento movimiento : listaMovimientos) {
+            ivCartasEnemigo.get(movimiento.getIdEscenario()).setImageBitmap(ConvertidorImagen.convertirStringABitmap(listaCartas.get(movimiento.getIdCarta()).getImagen()));
+            idCartasTableroEnemigo[movimiento.getIdEscenario()] = movimiento.getIdCarta();
         }
     }
 
