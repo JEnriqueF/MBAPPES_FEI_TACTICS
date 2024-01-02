@@ -205,7 +205,7 @@ public class Partida extends AppCompatActivity {
                         RespuestaMatchmaking respuestaMatchmaking = response.body();
 
                         if (respuestaMatchmaking.getRespuesta().equals("Partida cancelada correctamente")) {
-
+                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
                             Intent intent = new Intent(getApplicationContext(), PostJuego.class);
                             // Iniciar la actividad MenuP
                             startActivity(intent);
@@ -573,6 +573,8 @@ public class Partida extends AppCompatActivity {
                     Log.d("Respuesta", respuestaPartida.getListaMovimientos().toString());
                 }
 
+                Log.d("TURNO:", String.valueOf(turno));
+
                 if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Turno Jugado") || respuestaPartida.getRespuesta().equals("Ya se jugó un movimiento para Jugador en este turno"))) {
                     Log.d("IF 1", "");
 
@@ -599,9 +601,9 @@ public class Partida extends AppCompatActivity {
                     movimientoConsultadoAnterior = true;
                      List<Movimiento> listaMovimientos = respuestaPartida.getListaMovimientos();
                      colocarCartasEnemigo(listaMovimientos);
-                    if (turno == 4) {
+                    /*if (turno == 4) {
                         jugarTurno(partidaRequest);
-                    }
+                    }*/
                     turno++;
                     binding.lbNumTurno.setText(String.valueOf(turno));
                     binding.lbNumeroEnergia.setText(String.valueOf(turno));
