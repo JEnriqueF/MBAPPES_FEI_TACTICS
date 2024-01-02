@@ -61,7 +61,6 @@ public class Partida extends AppCompatActivity {
     int damageTotalEnemigo = 0;
     int damageTotalPropio = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -140,7 +139,6 @@ public class Partida extends AppCompatActivity {
 
         binding.lbNumTurno.setText(String.valueOf(turno));
 
-
         cargarAdversario();
 
         mostrarCartas();
@@ -191,7 +189,6 @@ public class Partida extends AppCompatActivity {
                 PartidaRequest partidaRequest = new PartidaRequest(jugador.getGamertag(), listaMovimientos);
 
                 jugarTurno(partidaRequest);
-
             }
         });
 
@@ -575,6 +572,10 @@ public class Partida extends AppCompatActivity {
 
                 Log.d("TURNO:", String.valueOf(turno));
 
+                if(turno < 4){
+                    turno++;
+                }
+
                 if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Turno Jugado") || respuestaPartida.getRespuesta().equals("Ya se jugó un movimiento para Jugador en este turno"))) {
                     Log.d("IF 1", "");
 
@@ -601,10 +602,11 @@ public class Partida extends AppCompatActivity {
                     movimientoConsultadoAnterior = true;
                      List<Movimiento> listaMovimientos = respuestaPartida.getListaMovimientos();
                      colocarCartasEnemigo(listaMovimientos);
-                    /*if (turno == 4) {
+                     
+                    if (turno == 4) {
                         jugarTurno(partidaRequest);
-                    }*/
-                    turno++;
+                    }
+
                     binding.lbNumTurno.setText(String.valueOf(turno));
                     binding.lbNumeroEnergia.setText(String.valueOf(turno));
                     habilitarTurno();
