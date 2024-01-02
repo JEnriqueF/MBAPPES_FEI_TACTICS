@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mbappesfeitactics.ConvertidorImagen;
 import com.mbappesfeitactics.DAO.EscenarioDAO;
@@ -45,8 +46,10 @@ public class Partida extends AppCompatActivity {
     private List<Escenario> listaEscenarios;
     private ArrayList<ImageView> ivCartasEnemigo = new ArrayList<>();
     private int[] idCartasTableroEnemigo = new int[3];
+    private ArrayList<TextView> tvCartasTableroEnemigo = new ArrayList<>();
     private ArrayList<ImageView> ivCartasTableroJugador = new ArrayList<>();
     private int[] idCartasTableroJugador = new int[3];
+    private ArrayList<TextView> tvCartasTableroJugador = new ArrayList<>();
     private List<FotosPerfil> listaFotosPerfil;
 
     private ImageView imagenClicada;
@@ -110,6 +113,27 @@ public class Partida extends AppCompatActivity {
         ivCartasEnemigo.add(binding.cartaEnemigo2);
         ivCartasEnemigo.add(binding.cartaEnemigo3);
 
+        //Arreglo AtaqueJugador
+        tvCartasTableroJugador.add(binding.lbNoAtaquePropio1);
+        tvCartasTableroJugador.add(binding.lbNoAtaquePropio2);
+        tvCartasTableroJugador.add(binding.lbNoAtaquePropio3);
+
+        for (TextView textView : tvCartasTableroJugador) {
+            textView.setText("0");
+        }
+
+        //Arreglo AtaqueEnemigo
+        tvCartasTableroEnemigo.add(binding.lbNoAtaqueEnemigo1);
+        tvCartasTableroEnemigo.add(binding.lbNoAtaqueEnemigo2);
+        tvCartasTableroEnemigo.add(binding.lbNoAtaqueEnemigo3);
+
+        for (TextView textView : tvCartasTableroEnemigo) {
+            textView.setText("0");
+        }
+
+        binding.lbNumeroEnergia.setText(String.valueOf(turno+1));
+
+
         cargarAdversario();
 
         mostrarCartas();
@@ -171,6 +195,7 @@ public class Partida extends AppCompatActivity {
     }
 
     private void moverCartasJugador(ImageView ivInvocadoraActual) {
+        int energia = Integer.parseInt((String) binding.lbNumeroEnergia.getText());
         if (imagenClicada == ivInvocadoraActual) {
             imagenClicada = null;
         } else {
@@ -239,8 +264,99 @@ public class Partida extends AppCompatActivity {
                             }
                         }
 
-                        mazoPartida[indexMazo] = idCartaClicadaActual;
-                        idCartasTableroJugador[indexTableroJugador] = idCartaClicadaPrimero;
+                        //
+
+                        int indexCarta = -1;
+                        for (Carta carta : listaCartas) {
+                            if (carta.getIdCarta() == idCartaClicadaPrimero) {
+                                indexCarta = listaCartas.indexOf(carta);
+                            }
+                        }
+
+                        if (indexCarta == -1) {
+
+                            int indexCartaPrimero = -1;
+                            if (idCartaClicadaPrimero != -1) {
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaPrimero) {
+                                        indexCartaPrimero = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia - listaCartas.get(indexCartaPrimero).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaPrimero).getPoder()));
+                            }
+
+                            if (idCartaClicadaActual != -1) {
+                                int indexCartaActual = -1;
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaActual) {
+                                        indexCartaActual = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia + listaCartas.get(indexCartaActual).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText("0");
+                            }
+
+                            if (idCartaClicadaActual != -1 && idCartaClicadaPrimero != -1) {
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaPrimero).getPoder()));
+                            }
+
+                            mazoPartida[indexMazo] = idCartaClicadaActual;
+                            idCartasTableroJugador[indexTableroJugador] = idCartaClicadaPrimero;
+                            binding.lbNumeroEnergia.setText(String.valueOf(energia));
+
+                            ivInvocadoraActual.setImageBitmap(bitmapClicadaPrimero);
+                            imagenClicada.setImageBitmap(bitmapClicadaActual);
+                            imagenClicada = null;
+
+                            Log.d("ID's TableroJugador", idCartasTableroJugador[0] + " " + idCartasTableroJugador[1] + " " + idCartasTableroJugador[2]);
+                            Log.d("ID´s Mazo", mazoPartida[0] + " " + mazoPartida[1] + " " + mazoPartida[2] + " " + mazoPartida[3]);
+
+                        } else if (listaCartas.get(indexCarta).getCosto() <= energia) {
+
+                            int indexCartaPrimero = -1;
+                            if (idCartaClicadaPrimero != -1) {
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaPrimero) {
+                                        indexCartaPrimero = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia - listaCartas.get(indexCartaPrimero).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaPrimero).getPoder()));
+                            }
+
+                            if (idCartaClicadaActual != -1) {
+                                int indexCartaActual = -1;
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaActual) {
+                                        indexCartaActual = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia + listaCartas.get(indexCartaActual).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText("0");
+                            }
+
+                            if (idCartaClicadaActual != -1 && idCartaClicadaPrimero != -1) {
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaPrimero).getPoder()));
+                            }
+
+                            mazoPartida[indexMazo] = idCartaClicadaActual;
+                            idCartasTableroJugador[indexTableroJugador] = idCartaClicadaPrimero;
+                            binding.lbNumeroEnergia.setText(String.valueOf(energia));
+
+                            ivInvocadoraActual.setImageBitmap(bitmapClicadaPrimero);
+                            imagenClicada.setImageBitmap(bitmapClicadaActual);
+                            imagenClicada = null;
+
+                            Log.d("ID's TableroJugador", idCartasTableroJugador[0] + " " + idCartasTableroJugador[1] + " " + idCartasTableroJugador[2]);
+                            Log.d("ID´s Mazo", mazoPartida[0] + " " + mazoPartida[1] + " " + mazoPartida[2] + " " + mazoPartida[3]);
+
+                        }
+
 
                     } else if (clicadaActualEsMazo) {
 
@@ -258,15 +374,100 @@ public class Partida extends AppCompatActivity {
                             }
                         }
 
-                        mazoPartida[indexMazo] = idCartaClicadaPrimero;
-                        idCartasTableroJugador[indexTableroJugador] = idCartaClicadaActual;
-                    }
-                    ivInvocadoraActual.setImageBitmap(bitmapClicadaPrimero);
-                    imagenClicada.setImageBitmap(bitmapClicadaActual);
-                    imagenClicada = null;
+                        //
 
-                    Log.d("ID's TableroJugador", idCartasTableroJugador[0]+" "+idCartasTableroJugador[1]+" "+idCartasTableroJugador[2]);
-                    Log.d("ID´s Mazo", mazoPartida[0]+" "+mazoPartida[1]+" "+mazoPartida[2]+" "+mazoPartida[3]);
+                        int indexCarta = -1;
+                        for (Carta carta : listaCartas) {
+                            if (carta.getIdCarta() == idCartaClicadaActual) {
+                                indexCarta = listaCartas.indexOf(carta);
+                            }
+                        }
+
+                        if (indexCarta == -1) {
+
+                            int indexCartaActual = -1;
+                            if (idCartaClicadaActual != -1) {
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaActual) {
+                                        indexCartaActual = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia - listaCartas.get(indexCartaActual).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaActual).getPoder()));
+                            }
+
+                            if (idCartaClicadaPrimero != -1) {
+                                int indexCartaPrimero = -1;
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaPrimero) {
+                                        indexCartaPrimero = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia + listaCartas.get(indexCartaPrimero).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText("0");
+                            }
+
+                            if (idCartaClicadaActual != -1 && idCartaClicadaPrimero != -1) {
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaActual).getPoder()));
+                            }
+
+                            mazoPartida[indexMazo] = idCartaClicadaPrimero;
+                            idCartasTableroJugador[indexTableroJugador] = idCartaClicadaActual;
+                            binding.lbNumeroEnergia.setText(String.valueOf(energia));
+
+                            ivInvocadoraActual.setImageBitmap(bitmapClicadaPrimero);
+                            imagenClicada.setImageBitmap(bitmapClicadaActual);
+                            imagenClicada = null;
+
+                            Log.d("ID's TableroJugador", idCartasTableroJugador[0] + " " + idCartasTableroJugador[1] + " " + idCartasTableroJugador[2]);
+                            Log.d("ID´s Mazo", mazoPartida[0] + " " + mazoPartida[1] + " " + mazoPartida[2] + " " + mazoPartida[3]);
+
+                        } else if (listaCartas.get(indexCarta).getCosto() <= energia) {
+
+                            int indexCartaActual = -1;
+                            if (idCartaClicadaActual != -1) {
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaActual) {
+                                        indexCartaActual = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia - listaCartas.get(indexCartaActual).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaActual).getPoder()));
+                            }
+
+                            if (idCartaClicadaPrimero != -1) {
+                                int indexCartaPrimero = -1;
+                                for (Carta carta : listaCartas) {
+                                    if (carta.getIdCarta() == idCartaClicadaPrimero) {
+                                        indexCartaPrimero = listaCartas.indexOf(carta);
+                                    }
+                                }
+                                energia = energia + listaCartas.get(indexCartaPrimero).getCosto();
+
+                                tvCartasTableroJugador.get(indexTableroJugador).setText("0");
+                            }
+
+                            if (idCartaClicadaActual != -1 && idCartaClicadaPrimero != -1) {
+                                tvCartasTableroJugador.get(indexTableroJugador).setText(String.valueOf(listaCartas.get(indexCartaActual).getPoder()));
+                            }
+
+                            mazoPartida[indexMazo] = idCartaClicadaPrimero;
+                            idCartasTableroJugador[indexTableroJugador] = idCartaClicadaActual;
+                            binding.lbNumeroEnergia.setText(String.valueOf(energia));
+
+                            ivInvocadoraActual.setImageBitmap(bitmapClicadaPrimero);
+                            imagenClicada.setImageBitmap(bitmapClicadaActual);
+                            imagenClicada = null;
+
+                            Log.d("ID's TableroJugador", idCartasTableroJugador[0] + " " + idCartasTableroJugador[1] + " " + idCartasTableroJugador[2]);
+                            Log.d("ID´s Mazo", mazoPartida[0] + " " + mazoPartida[1] + " " + mazoPartida[2] + " " + mazoPartida[3]);
+
+                        }
+
+                    }
                 }
             }
         }
@@ -349,6 +550,8 @@ public class Partida extends AppCompatActivity {
 
                     bloquearTurno();
 
+                    mostrarAtaquesEscenarioJugador();
+
                     //Mandar jugarTurno otra vez cada 10 segs maximo 1 min
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -398,6 +601,7 @@ public class Partida extends AppCompatActivity {
                     indexCarta = i;
                 }
             }
+            tvCartasTableroEnemigo.get(movimiento.getIdEscenario()).setText(listaCartas.get(indexCarta).getPoder());
             ivCartasEnemigo.get(movimiento.getIdEscenario()).setImageBitmap(ConvertidorImagen.convertirStringABitmap(listaCartas.get(indexCarta).getImagen()));
             idCartasTableroEnemigo[movimiento.getIdEscenario()] = movimiento.getIdCarta();
         }
@@ -429,6 +633,18 @@ public class Partida extends AppCompatActivity {
         }
         for (ImageView ivCartaTableroJugador : ivCartasTableroJugador) {
             ivCartaTableroJugador.setEnabled(false);
+        }
+    }
+
+    private void mostrarAtaquesEscenarioJugador() {
+        for (int i = 0; i < idCartasTableroJugador.length; i++) {
+            if (idCartasTableroJugador[i] != -1) {
+                for (Carta carta: listaCartas) {
+                    if (carta.getIdCarta() == idCartasTableroJugador[i]) {
+                        tvCartasTableroJugador.get(i).setText(carta.getPoder());
+                    }
+                }
+            }
         }
     }
 
