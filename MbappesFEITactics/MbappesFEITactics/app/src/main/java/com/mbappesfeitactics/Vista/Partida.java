@@ -133,6 +133,8 @@ public class Partida extends AppCompatActivity {
 
         binding.lbNumeroEnergia.setText(String.valueOf(turno+1));
 
+        binding.lbNumTurno.setText(String.valueOf(turno));
+
 
         cargarAdversario();
 
@@ -575,6 +577,7 @@ public class Partida extends AppCompatActivity {
                         jugarTurno(partidaRequest);
                     }
                     turno++;
+                    binding.lbNumTurno.setText(String.valueOf(turno));
                     habilitarTurno();
                 } else if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Juego terminado") || respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida")) && turno == 4) {
                     Log.d("IF 3", "");

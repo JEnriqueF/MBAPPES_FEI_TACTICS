@@ -201,7 +201,7 @@
 
             <TextView
                 android:id="@+id/lbEnergia"
-                android:layout_width="200dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Energía: "
@@ -214,6 +214,31 @@
 
             <TextView
                 android:id="@+id/lbNumeroEnergia"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="5"
+                android:textColor="@color/white"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/lbTurno"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Turno:"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/lbNumTurno"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
