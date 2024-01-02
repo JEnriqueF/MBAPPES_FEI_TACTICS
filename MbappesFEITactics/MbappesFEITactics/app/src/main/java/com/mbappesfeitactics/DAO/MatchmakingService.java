@@ -15,8 +15,8 @@ public interface MatchmakingService {
     @PATCH("/matchmaking/cancelarbusqueda")
     Call<RespuestaMatchmaking> cancelarBusqueda(@Body Map<String, String> jugadorSolicitado);
 
-    @POST("/matchmaking/cancelarpartida")
-    Call<RespuestaMatchmaking> cancelarPartida(@Body String jugadorCancelado);
+    @PATCH("/matchmaking/cancelarpartida")
+    Call<RespuestaMatchmaking> cancelarPartida(@Body Map<String, String> jugadorCancelado);
 
     @POST("/matchmaking/jugarturno")
     Call<RespuestaPartida> jugarTurno(@Body Map<String, Object> movimientos);

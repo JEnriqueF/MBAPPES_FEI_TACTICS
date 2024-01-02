@@ -2,6 +2,7 @@ package com.mbappesfeitactics.Vista;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 
 import com.mbappesfeitactics.ConvertidorImagen;
 import com.mbappesfeitactics.DAO.EscenarioDAO;
+import com.mbappesfeitactics.DAO.MatchmakingDAO;
 import com.mbappesfeitactics.DAO.PartidaDAO;
 import com.mbappesfeitactics.DAO.PartidaRequest;
 import com.mbappesfeitactics.DAO.RespuestaEscenarios;
+import com.mbappesfeitactics.DAO.RespuestaMatchmaking;
 import com.mbappesfeitactics.DAO.RespuestaPartida;
 import com.mbappesfeitactics.POJO.Carta;
 import com.mbappesfeitactics.POJO.Escenario;
@@ -55,6 +58,8 @@ public class Partida extends AppCompatActivity {
     private ImageView imagenClicada;
     private boolean movimientoConsultadoAnterior = false;
     private int turno = 1;
+    int damageTotalEnemigo = 0;
+    int damageTotalPropio = 0;
 
 
     @Override
@@ -192,7 +197,28 @@ public class Partida extends AppCompatActivity {
 
         binding.btnAbandonarPartida.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {  }
+            public void onClick(View v) {
+                Log.d("PRUEBA", RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag());
+                MatchmakingDAO.cancelarPartida(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), new Callback<RespuestaMatchmaking>() {
+                    @Override
+                    public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
+                        RespuestaMatchmaking respuestaMatchmaking = response.body();
+
+                        if (respuestaMatchmaking.getRespuesta().equals("Partida cancelada correctamente")) {
+
+                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                            // Iniciar la actividad MenuP
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RespuestaMatchmaking> call, Throwable t) {
+                        Log.d("PRUEBA", t.getMessage());
+                        Log.d("Fallo", "No se canceló correctamente");
+                    }
+                });
+            }
         });
     }
 
@@ -578,13 +604,37 @@ public class Partida extends AppCompatActivity {
                     }
                     turno++;
                     binding.lbNumTurno.setText(String.valueOf(turno));
+                    binding.lbNumeroEnergia.setText(String.valueOf(turno));
                     habilitarTurno();
                 } else if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Juego terminado") || respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida")) && turno == 4) {
                     Log.d("IF 3", "");
                     //Terminar Juego
+                    try{
+                        damageTotalEnemigo = Integer.parseInt(binding.lbNoAtaqueEnemigo1.getText().toString()) + Integer.parseInt(binding.lbNoAtaqueEnemigo2.getText().toString()) +Integer.parseInt(binding.lbNoAtaqueEnemigo3.getText().toString());
+                        damageTotalPropio = Integer.parseInt(binding.lbNoAtaquePropio1.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio2.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio3.getText().toString());
+
+                        if(damageTotalPropio < damageTotalEnemigo){
+                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
+                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                            startActivity(intent);
+                        }else if(damageTotalPropio > damageTotalEnemigo){
+                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Victoria");
+                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                            startActivity(intent);
+                        }else{
+                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Empate");
+                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                            startActivity(intent);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 } else if (respuestaPartida.getRespuesta() != null && respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida") && turno < 4) {
                     Log.d("IF 4", "");
                     //El otro jugador cancelo la partida
+                    Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                    startActivity(intent);
                 }
             }
 
@@ -604,7 +654,7 @@ public class Partida extends AppCompatActivity {
                     indexCarta = i;
                 }
             }
-            tvCartasTableroEnemigo.get(movimiento.getIdEscenario()).setText(listaCartas.get(indexCarta).getPoder());
+            tvCartasTableroEnemigo.get(movimiento.getIdEscenario()).setText(String.valueOf(listaCartas.get(indexCarta).getPoder()));
             ivCartasEnemigo.get(movimiento.getIdEscenario()).setImageBitmap(ConvertidorImagen.convertirStringABitmap(listaCartas.get(indexCarta).getImagen()));
             idCartasTableroEnemigo[movimiento.getIdEscenario()] = movimiento.getIdCarta();
         }
@@ -644,12 +694,13 @@ public class Partida extends AppCompatActivity {
             if (idCartasTableroJugador[i] != -1) {
                 for (Carta carta: listaCartas) {
                     if (carta.getIdCarta() == idCartasTableroJugador[i]) {
-                        tvCartasTableroJugador.get(i).setText(carta.getPoder());
+                        tvCartasTableroJugador.get(i).setText(String.valueOf(carta.getPoder()));
                     }
                 }
             }
         }
     }
+
 
     public int[] convertirMazo() {
         // Dividir el string en substrings usando la coma como separador

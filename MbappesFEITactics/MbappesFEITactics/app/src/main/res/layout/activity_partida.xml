@@ -67,7 +67,7 @@
                     android:id="@+id/lbNoAtaqueEnemigo1"
                     android:layout_width="100dp"
                     android:layout_height="30dp"
-                    android:text="3"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:gravity="center"/>
 
@@ -84,7 +84,7 @@
                     android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:textColor="@color/white"
-                    android:text="3"
+                    android:text="0"
                     android:gravity="center"/>
 
                 <ImageView
@@ -114,7 +114,7 @@
                     android:id="@+id/lbNoAtaqueEnemigo2"
                     android:layout_width="100dp"
                     android:layout_height="30dp"
-                    android:text="3"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:gravity="center"/>
 
@@ -131,7 +131,7 @@
                     android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:textColor="@color/white"
-                    android:text="3"
+                    android:text="0"
                     android:gravity="center"/>
 
                 <ImageView
@@ -161,7 +161,7 @@
                     android:id="@+id/lbNoAtaqueEnemigo3"
                     android:layout_width="100dp"
                     android:layout_height="30dp"
-                    android:text="3"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:gravity="center"/>
 
@@ -178,7 +178,7 @@
                     android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:textColor="@color/white"
-                    android:text="3"
+                    android:text="0"
                     android:gravity="center"/>
 
                 <ImageView

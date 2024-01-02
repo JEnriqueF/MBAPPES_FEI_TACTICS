@@ -71,7 +71,10 @@ public class MatchmakingDAO {
         Retrofit retrofit = APIClient.iniciarAPI();
         MatchmakingService matchmakingService = retrofit.create(MatchmakingService.class);
 
-        Call<RespuestaMatchmaking> call = matchmakingService.cancelarPartida(gamertag);
+        Map<String, String> jugador = new HashMap<>();
+        jugador.put("Gamertag", gamertag);
+
+        Call<RespuestaMatchmaking> call = matchmakingService.cancelarPartida(jugador);
 
         call.enqueue(new Callback<RespuestaMatchmaking>() {
             @Override
