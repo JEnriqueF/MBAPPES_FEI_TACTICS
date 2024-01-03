@@ -20,6 +20,7 @@ import retrofit2.Response;
 
 public class PostJuego extends AppCompatActivity {
 
+    Jugador jugador = RecursosCompartidosViewModel.obtenerInstancia().getJugador();
     ActivityPostJuegoBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,8 @@ public class PostJuego extends AppCompatActivity {
 
         binding.lbVictoriaDerrota.setText(RecursosCompartidosViewModel.obtenerInstancia().getEstadoFinalPartida());
 
-        if(RecursosCompartidosViewModel.obtenerInstancia().getEstadoFinalPartida() == "Victoria"){
+        if(RecursosCompartidosViewModel.obtenerInstancia().getEstadoFinalPartida().equals("Victoria")){
+            jugador.setPartidasGanadas(jugador.getPartidasGanadas()+1);
             MatchmakingDAO.guardarResultado(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), 1, new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -47,6 +49,7 @@ public class PostJuego extends AppCompatActivity {
                 }
             });
         }else{
+            jugador.setPartidasPerdidas(jugador.getPartidasPerdidas()+1);
             MatchmakingDAO.guardarResultado(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), 0, new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
