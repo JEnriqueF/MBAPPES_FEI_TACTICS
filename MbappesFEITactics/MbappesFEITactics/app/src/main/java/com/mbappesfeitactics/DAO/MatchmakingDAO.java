@@ -94,4 +94,31 @@ public class MatchmakingDAO {
             }
         });
     }
+
+    public static void guardarResultado(String gamertag, Integer resultado, final Callback<String> callback){
+        Retrofit retrofit = APIClient.iniciarAPI();
+        MatchmakingService matchmakingService = retrofit.create(MatchmakingService.class);
+
+        Map<String, Object> datosEnviar = new HashMap<>();
+        datosEnviar.put("Gamertag", gamertag);
+        datosEnviar.put("Resultado", resultado);
+        Call<String> call = matchmakingService.guardarResultado(datosEnviar);
+
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if(response.isSuccessful()){
+                    String respuesta = response.body();
+                    callback.onResponse(call, Response.success(respuesta));
+                }else{
+                    callback.onFailure(call, new Throwable("Error en la respuesta: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                callback.onFailure(call, t);
+            }
+        });
+    }
 }

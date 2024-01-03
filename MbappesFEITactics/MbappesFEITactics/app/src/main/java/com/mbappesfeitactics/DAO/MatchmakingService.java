@@ -1,5 +1,7 @@
 package com.mbappesfeitactics.DAO;
 
+import com.mbappesfeitactics.POJO.Jugador;
+
 import java.util.Map;
 
 import retrofit2.Call;
@@ -20,5 +22,8 @@ public interface MatchmakingService {
 
     @POST("/matchmaking/jugarturno")
     Call<RespuestaPartida> jugarTurno(@Body Map<String, Object> movimientos);
+
+    @POST("/matchmaking/guardarresultado")
+    Call<String> guardarResultado(@Body Map<String, Object> datosEnviar);
 
 }

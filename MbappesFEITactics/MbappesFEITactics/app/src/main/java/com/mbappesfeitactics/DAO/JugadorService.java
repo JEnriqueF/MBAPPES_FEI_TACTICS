@@ -29,6 +29,4 @@ public interface JugadorService {
     @POST("/jugador/recuperaroponente")
     Call<Jugador> recuperarOponente(@Body Map<String, String> gamertag);
 
-    @POST("/jugador/guardarresultado")
-    Call<Jugador> guardarResultado(@Body Map<String, Object> datosEnviar);
 }

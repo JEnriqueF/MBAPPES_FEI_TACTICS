@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mbappesfeitactics.DAO.JugadorDAO;
+import com.mbappesfeitactics.DAO.MatchmakingDAO;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.R;
 import com.mbappesfeitactics.databinding.ActivityPartidaBinding;
@@ -29,11 +30,11 @@ public class PostJuego extends AppCompatActivity {
         binding.lbVictoriaDerrota.setText(RecursosCompartidosViewModel.obtenerInstancia().getEstadoFinalPartida());
 
         if(RecursosCompartidosViewModel.obtenerInstancia().getEstadoFinalPartida() == "Victoria"){
-            JugadorDAO.guardarResultado(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), 1, new Callback<Jugador>() {
+            MatchmakingDAO.guardarResultado(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), 1, new Callback<String>() {
                 @Override
-                public void onResponse(Call<Jugador> call, Response<Jugador> response) {
-                    Jugador jugador = response.body();
-                    if(jugador != null){
+                public void onResponse(Call<String> call, Response<String> response) {
+                    String respuesta = response.body();
+                    if(respuesta != null){
                         showMessage("Resultado guardado");
                     }else {
                         showMessage("Operación no completada, intente más tarde");
@@ -41,16 +42,16 @@ public class PostJuego extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Jugador> call, Throwable t) {
+                public void onFailure(Call<String> call, Throwable t) {
 
                 }
             });
         }else{
-            JugadorDAO.guardarResultado(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), 0, new Callback<Jugador>() {
+            MatchmakingDAO.guardarResultado(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), 0, new Callback<String>() {
                 @Override
-                public void onResponse(Call<Jugador> call, Response<Jugador> response) {
-                    Jugador jugador = response.body();
-                    if(jugador != null){
+                public void onResponse(Call<String> call, Response<String> response) {
+                    String respuesta = response.body();
+                    if(respuesta != null){
                         showMessage("Resultado guardado");
                     }else {
                         showMessage("Operación no completada, intente más tarde");
@@ -58,7 +59,7 @@ public class PostJuego extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Jugador> call, Throwable t) {
+                public void onFailure(Call<String> call, Throwable t) {
 
                 }
             });
