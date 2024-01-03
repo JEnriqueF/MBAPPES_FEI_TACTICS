@@ -49,7 +49,11 @@ public class Jugador implements Parcelable {
         return password;
     }
 
+    public void setPartidasGanadas(int partidasGanadas){this.partidasGanadas = partidasGanadas;}
+
     public int getPartidasGanadas() { return partidasGanadas; }
+
+    public void setPartidasPerdidas(int partidasPerdidas){this.partidasPerdidas = partidasPerdidas;}
 
     public int getPartidasPerdidas() { return partidasPerdidas; }
 
@@ -60,6 +64,8 @@ public class Jugador implements Parcelable {
     public int getIdFoto() { return idFoto; }
 
     public void setIdFoto(int idFoto){ this.idFoto = idFoto; }
+
+
 
     @Override
     public int describeContents() {
