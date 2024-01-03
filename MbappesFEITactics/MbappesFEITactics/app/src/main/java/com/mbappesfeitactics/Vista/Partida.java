@@ -594,7 +594,7 @@ public class Partida extends AppCompatActivity {
                                 //controlar la condición
                             }
                         }
-                    }, 10000);
+                    }, 5000);
                 } else if (respuestaPartida.getListaMovimientos() != null) {
                     Log.d("IF 2", "");
                     //Poner las cartas recibidas y cambiar turno

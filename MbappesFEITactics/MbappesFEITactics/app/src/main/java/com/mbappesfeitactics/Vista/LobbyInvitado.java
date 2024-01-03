@@ -8,17 +8,25 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import com.mbappesfeitactics.DAO.CartaDAO;
 import com.mbappesfeitactics.DAO.EscenarioDAO;
+import com.mbappesfeitactics.DAO.FotosPerfilDAO;
 import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.DAO.MatchmakingDAO;
+import com.mbappesfeitactics.DAO.RespuestaCartas;
 import com.mbappesfeitactics.DAO.RespuestaEscenarios;
+import com.mbappesfeitactics.DAO.RespuestaFotosPerfil;
 import com.mbappesfeitactics.DAO.RespuestaMatchmaking;
 import com.mbappesfeitactics.MainActivity;
+import com.mbappesfeitactics.POJO.Carta;
+import com.mbappesfeitactics.POJO.Escenario;
+import com.mbappesfeitactics.POJO.FotosPerfil;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.R;
 import com.mbappesfeitactics.databinding.ActivityLobbyBinding;
 import com.mbappesfeitactics.databinding.ActivityLobbyInvitadoBinding;
 
+import java.util.List;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -31,11 +39,15 @@ public class LobbyInvitado extends AppCompatActivity {
     Jugador jugadorOponente;
     int contadorEspera;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLobbyInvitadoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        obtenerCartas();
+        obtenerFotosPerfil();
 
         //Bloque para creación de guest
         Random random = new Random();
@@ -104,22 +116,25 @@ public class LobbyInvitado extends AppCompatActivity {
 
                 String respuesta = response.body().getRespuesta();
 
-                Log.d("Prueba",respuesta );
 
-                if (respuesta != null && ("Ya se solicitó la partida".equals(respuesta) || "Partida Creada".equals(respuesta))) {
+                if (respuesta != null && ("Ya se solicitó la partida".equals(respuesta) || "Partida Creada".equals(respuesta) || "Solicitud Guardada".equals(respuesta))) {
+                    Log.d("Prueba","IF 1" );
                     // Usar un Handler para introducir una pausa de 10 segundos
                     handler1.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             if (contadorEspera < 6) {
+                                Log.d("Prueba","IF 2" );
                                 contadorEspera++;
                                 solicitarPartida();
                             } else {
+                                Log.d("Prueba","ELSE 2" );
                                 cancelarBusqueda();
                             }
                         }
                     }, 10000);
                 } else if (response.body().getGamertag() != null) {
+                    Log.d("Prueba","ELSE 1" );
                     Log.d("Gamertag", response.body().getGamertag());
                     abrirVentanaJuego(response.body().getGamertag());
                 }
@@ -183,5 +198,48 @@ public class LobbyInvitado extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(), Partida.class);
         startActivity(intent);
+    }
+
+    private void obtenerCartas() {
+        CartaDAO.recuperarCartas(new Callback<RespuestaCartas>() {
+            @Override
+            public void onResponse(Call<RespuestaCartas> call, Response<RespuestaCartas> response) {
+                if (response.isSuccessful()) {
+                    RespuestaCartas respuestaRecibida = response.body();
+
+                    // Asigna la lista de cartas a tu MutableLiveData
+                    if (respuestaRecibida != null) {
+                        List<Carta> listaCartas = respuestaRecibida.getCartas();
+                        Log.d("Recuperacion carta MenuP", "" + listaCartas.get(2));
+                        RecursosCompartidosViewModel.obtenerInstancia().setCartas(listaCartas);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaCartas> call, Throwable t) {
+                Log.d("ERROR", t.getMessage());
+            }
+        });
+    }
+
+    private void obtenerFotosPerfil() {
+        FotosPerfilDAO.recuperarFotosPerfil(new Callback<RespuestaFotosPerfil>() {
+            @Override
+            public void onResponse(Call<RespuestaFotosPerfil> call, Response<RespuestaFotosPerfil> response) {
+                if (response.isSuccessful()) {
+                    RespuestaFotosPerfil respuestaRecibida = response.body();
+
+                    if (respuestaRecibida != null) {
+                        List<FotosPerfil> listaFotosPerfil = respuestaRecibida.getFotosPerfil();
+
+                        RecursosCompartidosViewModel.obtenerInstancia().setFotosPerfil(listaFotosPerfil);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaFotosPerfil> call, Throwable t) { Log.d("ERROR", t.getMessage()); }
+        });
     }
 }

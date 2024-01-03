@@ -94,7 +94,7 @@ public class Lobby extends AppCompatActivity {
 
                 String respuesta = response.body().getRespuesta();
 
-                if (respuesta != null && ("Ya se solicitó la partida".equals(respuesta) || "Partida Creada".equals(respuesta))) {
+                if (respuesta != null && ("Ya se solicitó la partida".equals(respuesta) || "Partida Creada".equals(respuesta) || "Solicitud Guardada".equals(respuesta))) {
                     // Usar un Handler para introducir una pausa de 10 segundos
                     handler1.postDelayed(new Runnable() {
                         @Override
