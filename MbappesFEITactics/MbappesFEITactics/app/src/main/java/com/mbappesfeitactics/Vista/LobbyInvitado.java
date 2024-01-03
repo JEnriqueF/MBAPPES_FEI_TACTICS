@@ -50,15 +50,11 @@ public class LobbyInvitado extends AppCompatActivity {
         guest.setMazo(mazoGuest);
         RecursosCompartidosViewModel.obtenerInstancia().setJugador(guest);
 
-        Log.d("PruebaGuest", RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag());
-
-        Log.d("PruebaGuest2", RecursosCompartidosViewModel.obtenerInstancia().getGuest().getMazo());
-
         contadorEspera = 0;
         jugadorOponente = null;
         binding.btnCancelar.setEnabled(true);
 
-        binding.lbGamertagGuest.setText(RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag());
+        binding.lbGamertagGuest.setText(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag());
 
         iniciarBusqueda();
 
@@ -71,7 +67,7 @@ public class LobbyInvitado extends AppCompatActivity {
     }
 
     private void cancelarBusqueda() {
-        MatchmakingDAO.cancelarBusqueda(RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag(), new Callback<RespuestaMatchmaking>() {
+        MatchmakingDAO.cancelarBusqueda(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), new Callback<RespuestaMatchmaking>() {
             @Override
             public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
                 Log.d("Exito", "Se hizo clic en el botón Cancelar");
@@ -101,7 +97,7 @@ public class LobbyInvitado extends AppCompatActivity {
     private void solicitarPartida() {
         final Handler handler1 = new Handler();
 
-        MatchmakingDAO.solicitarPartida(RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag(), new Callback<RespuestaMatchmaking>() {
+        MatchmakingDAO.solicitarPartida(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), new Callback<RespuestaMatchmaking>() {
             @Override
             public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
                 Log.d("Exito", "");

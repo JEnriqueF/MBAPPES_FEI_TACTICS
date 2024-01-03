@@ -152,7 +152,13 @@ public class Lobby extends AppCompatActivity {
     }
 
     private void abrirVentanaJuego(String gamertag) {
-        recuperarOponente(gamertag);
+        if(!gamertag.startsWith("guest")){
+            recuperarOponente(gamertag);
+        }else {
+            Jugador guest = new Jugador();
+            guest.setGamertag(gamertag);
+            RecursosCompartidosViewModel.obtenerInstancia().setAdversario(guest);
+        }
         recuperarEscenarios();
 
         try {
