@@ -200,12 +200,16 @@ public class Partida extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
                         RespuestaMatchmaking respuestaMatchmaking = response.body();
-
                         if (respuestaMatchmaking.getRespuesta().equals("Partida cancelada correctamente")) {
-                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
-                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
-                            // Iniciar la actividad MenuP
-                            startActivity(intent);
+                            if(jugador.getGamertag().startsWith("guest")){
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
+                                Intent intent = new Intent(getApplicationContext(), PostJuegoGuest.class);
+                                startActivity(intent);
+                            }else{
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
+                                Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                                startActivity(intent);
+                            }
                         }
                     }
 
@@ -572,9 +576,6 @@ public class Partida extends AppCompatActivity {
 
                 Log.d("TURNO:", String.valueOf(turno));
 
-                if(turno < 4){
-                    turno++;
-                }
 
                 if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Turno Jugado") || respuestaPartida.getRespuesta().equals("Ya se jugó un movimiento para Jugador en este turno"))) {
                     Log.d("IF 1", "");
@@ -607,9 +608,13 @@ public class Partida extends AppCompatActivity {
                         jugarTurno(partidaRequest);
                     }
 
+                    if(turno < 4){
+                        turno++;
+                    }
                     binding.lbNumTurno.setText(String.valueOf(turno));
                     binding.lbNumeroEnergia.setText(String.valueOf(turno));
                     habilitarTurno();
+
                 } else if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Juego terminado") || respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida")) && turno == 4) {
                     Log.d("IF 3", "");
                     //Terminar Juego
@@ -660,8 +665,15 @@ public class Partida extends AppCompatActivity {
                 } else if (respuestaPartida.getRespuesta() != null && respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida") && turno < 4) {
                     Log.d("IF 4", "");
                     //El otro jugador cancelo la partida
-                    Intent intent = new Intent(getApplicationContext(), PostJuego.class);
-                    startActivity(intent);
+                    RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Victoria");
+                    if(jugador.getGamertag().startsWith("guest")){
+                        Intent intent = new Intent(getApplicationContext(), PostJuegoGuest.class);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                        startActivity(intent);
+                    }
+
                 }
             }
 
