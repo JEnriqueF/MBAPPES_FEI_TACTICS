@@ -13,11 +13,11 @@ import com.mbappesfeitactics.DAO.JugadorDAO;
 import com.mbappesfeitactics.DAO.MatchmakingDAO;
 import com.mbappesfeitactics.DAO.RespuestaEscenarios;
 import com.mbappesfeitactics.DAO.RespuestaMatchmaking;
+import com.mbappesfeitactics.MainActivity;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.R;
-import com.mbappesfeitactics.Vista.ui.menu.MenuFragment;
 import com.mbappesfeitactics.databinding.ActivityLobbyBinding;
-import com.mbappesfeitactics.databinding.ActivityMainBinding;
+import com.mbappesfeitactics.databinding.ActivityLobbyInvitadoBinding;
 
 import java.util.Random;
 
@@ -25,26 +25,40 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Lobby extends AppCompatActivity {
+public class LobbyInvitado extends AppCompatActivity {
 
-
-    Jugador jugador = RecursosCompartidosViewModel.obtenerInstancia().getJugador();
-
-    ActivityLobbyBinding binding;
+    ActivityLobbyInvitadoBinding binding;
     Jugador jugadorOponente;
-
     int contadorEspera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLobbyBinding.inflate(getLayoutInflater());
+        binding = ActivityLobbyInvitadoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //Bloque para creación de guest
+        Random random = new Random();
+        int numeroEntero = random.nextInt();
+        int numeroEnRango = random.nextInt(1000);
+
+        String gamertagGuest = "guest" + String.valueOf(numeroEnRango);
+        String mazoGuest = "9,10,11,12";
+        Jugador guest = new Jugador();
+        guest.setGamertag(gamertagGuest);
+        guest.setIdFoto(1);
+        guest.setMazo(mazoGuest);
+        RecursosCompartidosViewModel.obtenerInstancia().setJugador(guest);
+
+        Log.d("PruebaGuest", RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag());
+
+        Log.d("PruebaGuest2", RecursosCompartidosViewModel.obtenerInstancia().getGuest().getMazo());
 
         contadorEspera = 0;
         jugadorOponente = null;
-
         binding.btnCancelar.setEnabled(true);
+
+        binding.lbGamertagGuest.setText(RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag());
 
         iniciarBusqueda();
 
@@ -57,12 +71,12 @@ public class Lobby extends AppCompatActivity {
     }
 
     private void cancelarBusqueda() {
-        MatchmakingDAO.cancelarBusqueda(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), new Callback<RespuestaMatchmaking>() {
+        MatchmakingDAO.cancelarBusqueda(RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag(), new Callback<RespuestaMatchmaking>() {
             @Override
             public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
                 Log.d("Exito", "Se hizo clic en el botón Cancelar");
                 // Crear un Intent para iniciar la actividad MenuP
-                Intent intent = new Intent(getApplicationContext(), MenuP.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 // Iniciar la actividad MenuP
                 startActivity(intent);
             }
@@ -87,12 +101,14 @@ public class Lobby extends AppCompatActivity {
     private void solicitarPartida() {
         final Handler handler1 = new Handler();
 
-        MatchmakingDAO.solicitarPartida(RecursosCompartidosViewModel.obtenerInstancia().getJugador().getGamertag(), new Callback<RespuestaMatchmaking>() {
+        MatchmakingDAO.solicitarPartida(RecursosCompartidosViewModel.obtenerInstancia().getGuest().getGamertag(), new Callback<RespuestaMatchmaking>() {
             @Override
             public void onResponse(Call<RespuestaMatchmaking> call, Response<RespuestaMatchmaking> response) {
                 Log.d("Exito", "");
 
                 String respuesta = response.body().getRespuesta();
+
+                Log.d("Prueba",respuesta );
 
                 if (respuesta != null && ("Ya se solicitó la partida".equals(respuesta) || "Partida Creada".equals(respuesta))) {
                     // Usar un Handler para introducir una pausa de 10 segundos
@@ -152,7 +168,14 @@ public class Lobby extends AppCompatActivity {
     }
 
     private void abrirVentanaJuego(String gamertag) {
-        recuperarOponente(gamertag);
+        if(!gamertag.startsWith("guest")){
+            recuperarOponente(gamertag);
+        }else {
+            Jugador guest = new Jugador();
+            guest.setGamertag(gamertag);
+            RecursosCompartidosViewModel.obtenerInstancia().setAdversario(guest);
+        }
+        //recuperarOponente(gamertag);
         recuperarEscenarios();
 
         try {
@@ -160,6 +183,7 @@ public class Lobby extends AppCompatActivity {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
 
         Intent intent = new Intent(getApplicationContext(), Partida.class);
         startActivity(intent);

@@ -613,25 +613,48 @@ public class Partida extends AppCompatActivity {
                 } else if (respuestaPartida.getRespuesta() != null && (respuestaPartida.getRespuesta().equals("Juego terminado") || respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida")) && turno == 4) {
                     Log.d("IF 3", "");
                     //Terminar Juego
-                    try{
-                        damageTotalEnemigo = Integer.parseInt(binding.lbNoAtaqueEnemigo1.getText().toString()) + Integer.parseInt(binding.lbNoAtaqueEnemigo2.getText().toString()) +Integer.parseInt(binding.lbNoAtaqueEnemigo3.getText().toString());
-                        damageTotalPropio = Integer.parseInt(binding.lbNoAtaquePropio1.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio2.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio3.getText().toString());
+                    if(jugador.getGamertag().startsWith("guest")){
+                        try{
+                            damageTotalEnemigo = Integer.parseInt(binding.lbNoAtaqueEnemigo1.getText().toString()) + Integer.parseInt(binding.lbNoAtaqueEnemigo2.getText().toString()) +Integer.parseInt(binding.lbNoAtaqueEnemigo3.getText().toString());
+                            damageTotalPropio = Integer.parseInt(binding.lbNoAtaquePropio1.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio2.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio3.getText().toString());
 
-                        if(damageTotalPropio < damageTotalEnemigo){
-                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
-                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
-                            startActivity(intent);
-                        }else if(damageTotalPropio > damageTotalEnemigo){
-                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Victoria");
-                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
-                            startActivity(intent);
-                        }else{
-                            RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Empate");
-                            Intent intent = new Intent(getApplicationContext(), PostJuego.class);
-                            startActivity(intent);
+                            if(damageTotalPropio < damageTotalEnemigo){
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
+                                Intent intent = new Intent(getApplicationContext(), PostJuegoGuest.class);
+                                startActivity(intent);
+                            }else if(damageTotalPropio > damageTotalEnemigo){
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Victoria");
+                                Intent intent = new Intent(getApplicationContext(), PostJuegoGuest.class);
+                                startActivity(intent);
+                            }else{
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Empate");
+                                Intent intent = new Intent(getApplicationContext(), PostJuegoGuest.class);
+                                startActivity(intent);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
-                    }catch (Exception e){
-                        e.printStackTrace();
+                    }else{
+                        try{
+                            damageTotalEnemigo = Integer.parseInt(binding.lbNoAtaqueEnemigo1.getText().toString()) + Integer.parseInt(binding.lbNoAtaqueEnemigo2.getText().toString()) +Integer.parseInt(binding.lbNoAtaqueEnemigo3.getText().toString());
+                            damageTotalPropio = Integer.parseInt(binding.lbNoAtaquePropio1.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio2.getText().toString()) + Integer.parseInt(binding.lbNoAtaquePropio3.getText().toString());
+
+                            if(damageTotalPropio < damageTotalEnemigo){
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Derrota");
+                                Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                                startActivity(intent);
+                            }else if(damageTotalPropio > damageTotalEnemigo){
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Victoria");
+                                Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                                startActivity(intent);
+                            }else{
+                                RecursosCompartidosViewModel.obtenerInstancia().setEstadoFinalPartida("Empate");
+                                Intent intent = new Intent(getApplicationContext(), PostJuego.class);
+                                startActivity(intent);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
 
                 } else if (respuestaPartida.getRespuesta() != null && respuestaPartida.getRespuesta().equals("Jugador no encontrado en la partida") && turno < 4) {

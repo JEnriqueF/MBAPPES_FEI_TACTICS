@@ -17,6 +17,12 @@
         android:theme="@style/Theme.MbappesFEITactics"
         tools:targetApi="31">
         <activity
+            android:name=".Vista.PostJuegoGuest"
+            android:exported="false" />
+        <activity
+            android:name=".Vista.LobbyInvitado"
+            android:exported="false" />
+        <activity
             android:name=".Vista.PostJuego"
             android:exported="false" />
         <activity

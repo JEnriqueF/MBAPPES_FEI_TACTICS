@@ -6,14 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.mbappesfeitactics.POJO.Jugador;
+import com.mbappesfeitactics.MainActivity;
 import com.mbappesfeitactics.R;
-import com.mbappesfeitactics.databinding.ActivityPartidaBinding;
+import com.mbappesfeitactics.databinding.ActivityMainBinding;
 import com.mbappesfeitactics.databinding.ActivityPostJuegoBinding;
 
-public class PostJuego extends AppCompatActivity {
+public class PostJuegoGuest extends AppCompatActivity {
 
     ActivityPostJuegoBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,7 @@ public class PostJuego extends AppCompatActivity {
         binding.btnTerminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MenuP.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });

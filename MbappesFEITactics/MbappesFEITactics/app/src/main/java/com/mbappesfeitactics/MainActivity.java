@@ -19,14 +19,18 @@ import com.mbappesfeitactics.DAO.RespuestaCartas;
 import com.mbappesfeitactics.POJO.Carta;
 import com.mbappesfeitactics.POJO.Jugador;
 import com.mbappesfeitactics.Vista.CrearUsuario;
+import com.mbappesfeitactics.Vista.Lobby;
+import com.mbappesfeitactics.Vista.LobbyInvitado;
 import com.mbappesfeitactics.Vista.MenuP;
 import com.mbappesfeitactics.Vista.MenuPrincipal;
+import com.mbappesfeitactics.Vista.PostJuego;
 import com.mbappesfeitactics.Vista.RecursosCompartidosViewModel;
 import com.mbappesfeitactics.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
 
         binding.btnCrearCuenta.setOnClickListener(v -> {
             Intent intent = new Intent(this, CrearUsuario.class);
+            startActivity(intent);
+        });
+
+        binding.btnIniciarInvitado.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), LobbyInvitado.class);
             startActivity(intent);
         });
 

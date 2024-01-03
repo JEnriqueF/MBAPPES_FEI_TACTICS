@@ -16,6 +16,7 @@ public class RecursosCompartidosViewModel {
     private List<Escenario> escenarios;
     private Jugador jugador;
     private Jugador adversario;
+    private Jugador guest;
     private String estadoFinalPartida = null;
 
     // Constructor privado para evitar instanciación directa
@@ -69,7 +70,11 @@ public class RecursosCompartidosViewModel {
     public Jugador getAdversario() { return adversario; }
     public void setAdversario(Jugador adversario) { this.adversario = adversario; }
 
+    //Getters y setters para guest
+    public Jugador getGuest() { return guest; }
+    public void setGuest(Jugador guest) { this.guest = guest; }
     public void setEstadoFinalPartida(String estadoFinalPartida){this.estadoFinalPartida = estadoFinalPartida;}
 
     public String getEstadoFinalPartida(){ return estadoFinalPartida;}
+
 }
